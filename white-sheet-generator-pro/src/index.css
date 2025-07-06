@@ -1,0 +1,329 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 207 89% 11%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 207 89% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 207 89% 11%;
+
+    --primary: 222 92% 13%; /* Oxford blue */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 48 64% 54%; /* Golden color */
+    --secondary-foreground: 207 89% 11%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 52 63% 50%;
+    --accent-foreground: 207 89% 11%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 207 89% 11%;
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 207 89% 11%;
+    --sidebar-primary: 207 89% 11%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 52 63% 50%;
+    --sidebar-accent-foreground: 207 89% 11%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 207 89% 11%;
+  }
+
+  .dark {
+    --background: 207 89% 11%;
+    --foreground: 0 0% 98%;
+
+    --card: 207 89% 11%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 207 89% 11%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 0 0% 98%;
+    --primary-foreground: 207 89% 11%;
+
+    --secondary: 52 63% 50%;
+    --secondary-foreground: 207 89% 11%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 52 63% 50%;
+    --accent-foreground: 207 89% 11%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 52 63% 50%;
+    --sidebar-background: 207 89% 11%;
+    --sidebar-foreground: 0 0% 98%;
+    --sidebar-primary: 52 63% 50%;
+    --sidebar-primary-foreground: 207 89% 11%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 52 63% 50%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+}
+
+/* Custom animations */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-slow {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.02);
+    opacity: 0.9;
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.8s ease-out;
+}
+
+.animate-fade-up {
+  animation: fade-up 0.8s ease-out forwards;
+  opacity: 0;
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 3s ease-in-out infinite;
+}
+
+.animation-delay-200 {
+  animation-delay: 0.2s;
+}
+
+.animation-delay-400 {
+  animation-delay: 0.4s;
+}
+
+.animation-delay-600 {
+  animation-delay: 0.6s;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  overflow-x: hidden;
+}
+
+.fade-in-section {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1), transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fade-in-section-init {
+  opacity: 0;
+  transform: translateY(32px);
+}
+
+@keyframes brush-reveal {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+.brush-animate {
+  transform-origin: left;
+  animation: brush-reveal 0.8s ease-out forwards;
+}
+
+/* Hero Animation Styles */
+@keyframes morph {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) rotate(0deg);
+  }
+  25% {
+    opacity: 0.6;
+    transform: scale(1.1) rotate(5deg);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(0.9) rotate(-3deg);
+  }
+  75% {
+    opacity: 0.7;
+    transform: scale(1.05) rotate(2deg);
+  }
+  100% {
+    opacity: 0.5;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+@keyframes float {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  50% {
+    opacity: 0.8;
+    transform: translateY(-5px);
+  }
+  100% {
+    opacity: 0.3;
+    transform: translateY(0px);
+  }
+}
+
+.animate-morph {
+  animation: morph 3s ease-in-out infinite alternate;
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite alternate;
+}
+
+/* Stagger the animation delays for a more organic feel */
+.morph-shape:nth-child(3) {
+  animation-duration: 3.5s;
+}
+
+.morph-shape:nth-child(4) {
+  animation-duration: 2.8s;
+}
+
+.morph-shape:nth-child(5) {
+  animation-duration: 3.2s;
+}
+
+.particle:nth-child(n+6) {
+  animation-duration: 5s;
+}
+
+.particle:nth-child(2n) {
+  animation-direction: alternate-reverse;
+}
+
+/* Rocket Animation Styles */
+@keyframes launch {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 1;
+  }
+  20% {
+    transform: translate(-5px, -8px) rotate(-5deg);
+    opacity: 1;
+  }
+  40% {
+    transform: translate(-8px, -12px) rotate(-8deg);
+    opacity: 1;
+  }
+  60% {
+    transform: translate(-10px, -8px) rotate(-5deg);
+    opacity: 1;
+  }
+  80% {
+    transform: translate(-12px, -10px) rotate(-6deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-15px, -12px) rotate(-7deg);
+    opacity: 1;
+  }
+}
+
+@keyframes flame {
+  0% {
+    opacity: 0;
+    transform: scaleY(0.5);
+  }
+  25% {
+    opacity: 0.8;
+    transform: scaleY(1.2);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scaleY(0.8);
+  }
+  75% {
+    opacity: 0.7;
+    transform: scaleY(1.1);
+  }
+  100% {
+    opacity: 0.6;
+    transform: scaleY(0.9);
+  }
+}
+
+.animate-launch {
+  animation: launch 2s ease-out forwards;
+}
+
+.animate-flame {
+  animation: flame 1.5s ease-in-out infinite alternate;
+}
+
+/* Stagger flame animations for more realistic effect */
+.flame:nth-child(2) {
+  animation-duration: 1.8s;
+}
+
+.flame:nth-child(3) {
+  animation-duration: 1.3s;
+}
+
+.flame:nth-child(4) {
+  animation-duration: 2s;
+}
+
+.flame:nth-child(5) {
+  animation-duration: 1.6s;
+}
