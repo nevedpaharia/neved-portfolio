@@ -1,4 +1,3 @@
-
 import React, {
   useEffect,
   useRef,
@@ -130,7 +129,7 @@ const Testimonials = () => {
         pointerEvents: "auto",
         filter: "none",
         transform: `translateX(0px) translateY(0px) scale(1) rotateY(0deg)`,
-        boxShadow: "0 10px 40px rgba(0,0,0,0.16)",
+        boxShadow: "0 4px 32px 0 rgba(0,0,0,0.18)",
         transition: "all 0.7s cubic-bezier(.4,2,.3,1)",
         transformStyle: 'preserve-3d',
       };
@@ -180,171 +179,175 @@ const Testimonials = () => {
   return (
     <section
       id="testimonials"
-      className="py-20 pb-24 relative overflow-hidden"
+      className="py-72 md:py-[400px] relative overflow-hidden flex items-center min-h-screen"
     >
-      <div className="absolute inset-0">
-        <div className="absolute bottom-20 right-10 w-60 h-60 bg-[#ccb533] rounded-full blur-3xl opacity-15"></div>
-        <div className="absolute top-1/2 left-1/3 w-64 h-64 bg-[#031636] rounded-full blur-3xl opacity-20"></div>
-        <div className="absolute bottom-1/3 left-20 w-48 h-48 bg-[#ccb533] rounded-full blur-3xl opacity-12"></div>
-        {/* <div className="absolute top-1/4 right-1/4 w-80 h-80 bg-[#031636] rounded-full blur-3xl opacity-18"></div> */}
-        <div className="absolute bottom-1/4 right-1/3 w-56 h-56 bg-[#031636] rounded-full blur-3xl opacity-15"></div>
-      </div>
+      <img
+        src="/background/paper 3.png"
+        alt="Torn Paper Background"
+        className="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none select-none"
+        draggable={false}
+        aria-hidden="true"
+      />
       <div
-        className="max-w-6xl mx-auto px-8 pb-16 relative z-10"
+        className="max-w-6xl mx-auto px-4 md:px-8 pb-4 md:pb-8 relative z-10"
         data-aos="fade-up"
         ref={fadeRef}
       >
-        <div className="text-center mb-16">
-          <h2 className="quentin-font text-4xl md:text-5xl font-bold text-primary mb-6">
-            Hear from Them
+        <div className="text-center mb-6 md:mb-10">
+          <h2 className="quentin-font text-4xl md:text-5xl lg:text-6xl font-bold text-primary mb-5" data-aos="fade-up" data-aos-delay="0">
+            The best  thing about Design
           </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            What my Teachers and clients say about me
+          <p className="text-base md:text-xl text-muted-foreground max-w-2xl mx-auto mb-[84px]" data-aos="fade-up" data-aos-delay="90">
+            ~is, it's all about the people~
           </p>
         </div>
 
-        <div className="w-full max-w-4xl p-8 mx-auto">
-          <div className={isMobile ? "flex flex-col gap-8 items-center" : "grid grid-cols-[auto_1fr] gap-24 items-center h-96"}>
-            {/* Carousel Column */}
-            <div
-              className={isMobile 
-                ? "relative w-[200px] h-[260px] perspective-1000" 
-                : "relative w-[240px] md:w-[300px] h-full perspective-1000 ml-10"
-              }
-              ref={imageContainerRef}
-              style={{ perspective: '900px' }}
-            >
-              {testimonials.map((testimonial, index) => (
-                <div
-                  key={testimonial.src}
-                  className="absolute left-0 top-0 w-full aspect-[3/4] overflow-hidden"
-                  style={{ ...getImageStyle(index), transformStyle: 'preserve-3d' }}
-                >
-                  <div className="group relative w-full h-full rounded-xl bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg transition-all duration-300 ease-in-out flex flex-col overflow-hidden">
-                    <img 
-                      src={testimonial.src} 
-                      alt={testimonial.name}
-                      className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
-                      loading="lazy"
-                      onError={(e) => {
-                        console.log(`Testimonial image failed to load: ${testimonial.src}`);
-                        e.currentTarget.style.display = 'none';
-                        const parent = e.currentTarget.parentElement;
-                        if (parent) {
-                          parent.innerHTML = `<div class="w-full h-full bg-gradient-to-br from-primary/20 to-secondary/20 flex flex-col items-center justify-center text-primary">
-                            <div class="text-2xl font-bold mb-2">${testimonial.name.split(' ').map(n => n[0]).join('')}</div>
-                            <div class="text-sm text-center px-4">${testimonial.name}</div>
-                          </div>`;
-                        }
-                      }}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-            {/* Text Column */}
-            <div className={isMobile 
-              ? "relative flex flex-col justify-center text-center px-4 min-h-[300px]" 
-              : "relative flex flex-col justify-center h-full w-full text-left pb-20"
-            }>
-              {/* Fixed Name and Role Section */}
-              <div 
+        <div className="w-full max-w-7xl mx-auto">
+          <div data-aos="fade-up" data-aos-delay="210" className={isMobile ? "flex flex-col gap-6 items-center" : "grid grid-cols-[auto_2fr] gap-24 items-start h-96 mx-auto"}>
+              {/* Carousel Column */}
+              <div
                 className={isMobile 
-                  ? "mb-4" 
-                  : "absolute top-1/2 transform -translate-y-1/2"
-                } 
-                style={!isMobile ? { top: 'calc(50% - 135px)' } : {}}
+                  ? "relative w-[160px] h-[210px] perspective-1000" 
+                  : "relative w-[240px] md:w-[300px] h-full perspective-1000 pl-6"
+                }
+                ref={imageContainerRef}
+                style={{ perspective: '900px' }}
               >
-                <h3
-                  className="font-bold mb-1 text-primary"
-                  style={{ fontSize: '1.75rem' }}
-                >
-                  {activeTestimonial.name}
-                </h3>
-                <p
-                  className="mb-2 text-muted-foreground"
-                  style={{ fontSize: '1rem', marginTop: '-8px' }}
-                >
-                  {activeTestimonial.designation}
-                </p>
-              </div>
-              
-              {/* Fixed Message Start Position */}
-              <div 
-                className={isMobile ? "mb-6" : "absolute"} 
-                style={!isMobile ? { top: 'calc(50% - 100px)' } : {}}
-              >
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={activeIndex}
-                    variants={quoteVariants}
-                    initial="initial"
-                    animate="animate"
-                    exit="exit"
-                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                {testimonials.map((testimonial, index) => (
+                  <div
+                    key={testimonial.src}
+                    className="absolute left-0 top-0 w-full aspect-[3/4] overflow-hidden"
+                    style={{ ...getImageStyle(index), transformStyle: 'preserve-3d' }}
                   >
-                    <motion.p
-                      className="leading-relaxed text-foreground"
-                      style={{ fontSize: '1.25rem' }}
-                    >
-                      {activeTestimonial.quote.split(" ").map((word, i) => (
-                        <motion.span
-                          key={i}
-                          initial={{
-                            filter: "blur(10px)",
-                            opacity: 0,
-                            y: 5,
-                          }}
-                          animate={{
-                            filter: "blur(0px)",
-                            opacity: 1,
-                            y: 0,
-                          }}
-                          transition={{
-                            duration: 0.22,
-                            ease: "easeInOut",
-                            delay: 0.025 * i,
-                          }}
-                          style={{ display: "inline-block" }}
-                        >
-                          {word}&nbsp;
-                        </motion.span>
-                      ))}
-                    </motion.p>
-                  </motion.div>
-                </AnimatePresence>
+                    <div className="group relative w-full h-full rounded-lg md:rounded-xl bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg transition-all duration-300 ease-in-out flex flex-col overflow-hidden">
+                      <img 
+                        src={testimonial.src} 
+                        alt={testimonial.name}
+                        className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                        loading="lazy"
+                        onError={(e) => {
+                          console.log(`Testimonial image failed to load: ${testimonial.src}`);
+                          e.currentTarget.style.display = 'none';
+                          const parent = e.currentTarget.parentElement;
+                          if (parent) {
+                            parent.innerHTML = `<div class="w-full h-full bg-gradient-to-br from-primary/20 to-secondary/20 flex flex-col items-center justify-center text-primary">
+                              <div class="text-xl md:text-2xl font-bold mb-2">${testimonial.name.split(' ').map(n => n[0]).join('')}</div>
+                              <div class="text-xs md:text-sm text-center px-4">${testimonial.name}</div>
+                            </div>`;
+                          }
+                        }}
+                      />
+                    </div>
+                  </div>
+                ))}
               </div>
-              <div 
-                className={isMobile 
-                  ? "flex gap-4 justify-center" 
-                  : "flex gap-6 absolute left-0"
-                } 
-                style={!isMobile ? { bottom: '28px' } : {}}
-              >
-                <button
-                  className="w-11 h-11 rounded-full flex items-center justify-center cursor-pointer transition-all duration-300 border-none bg-primary hover:bg-secondary"
-                  onClick={handlePrev}
-                  onMouseEnter={() => setHoverPrev(true)}
-                  onMouseLeave={() => setHoverPrev(false)}
-                  aria-label="Previous testimonial"
+              {/* Text Column */}
+              <div className={isMobile 
+                ? "relative flex flex-col justify-center text-center px-2 min-h-[280px]" 
+                : "relative flex flex-col justify-center h-full w-[120%] text-left pb-20 pr-12"
+              }>
+                {/* Fixed Name and Role Section */}
+                <div 
+                  className={isMobile 
+                    ? "mb-3" 
+                    : "absolute top-1/2 transform -translate-y-1/2"
+                  } 
+                  style={!isMobile ? { top: 'calc(50% - 135px)' } : {}}
                 >
-                  <FaArrowLeft size={28} className="text-primary-foreground" />
-                </button>
-                <button
-                  className="w-11 h-11 rounded-full flex items-center justify-center cursor-pointer transition-all duration-300 border-none bg-primary hover:bg-secondary"
-                  onClick={handleNext}
-                  onMouseEnter={() => setHoverNext(true)}
-                  onMouseLeave={() => setHoverNext(false)}
-                  aria-label="Next testimonial"
+                  <h3
+                    className="font-bold mb-1 text-primary"
+                    style={{ fontSize: isMobile ? '1.25rem' : '1.75rem' }}
+                  >
+                    {activeTestimonial.name}
+                  </h3>
+                  <p
+                    className="mb-2 text-muted-foreground"
+                    style={{ fontSize: isMobile ? '0.875rem' : '1rem', marginTop: '-4px' }}
+                  >
+                    {activeTestimonial.designation}
+                  </p>
+                </div>
+                
+                {/* Fixed Message Start Position */}
+                <div 
+                  className={isMobile ? "mb-4" : "absolute"} 
+                  style={!isMobile ? { top: 'calc(50% - 100px)' } : {}}
                 >
-                  <FaArrowRight size={28} className="text-primary-foreground" />
-                </button>
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={activeIndex}
+                      variants={quoteVariants}
+                      initial="initial"
+                      animate="animate"
+                      exit="exit"
+                      transition={{ duration: 0.3, ease: "easeInOut" }}
+                    >
+                      <motion.p
+                        className="leading-relaxed text-foreground"
+                        style={{ fontSize: isMobile ? '0.95rem' : '1.25rem' }}
+                      >
+                        {activeTestimonial.quote.split(" ").map((word, i) => (
+                          <motion.span
+                            key={i}
+                            initial={{
+                              filter: "blur(10px)",
+                              opacity: 0,
+                              y: 5,
+                            }}
+                            animate={{
+                              filter: "blur(0px)",
+                              opacity: 1,
+                              y: 0,
+                            }}
+                            transition={{
+                              duration: 0.22,
+                              ease: "easeInOut",
+                              delay: 0.025 * i,
+                            }}
+                            style={{ display: "inline-block" }}
+                          >
+                            {word}&nbsp;
+                          </motion.span>
+                        ))}
+                      </motion.p>
+                    </motion.div>
+                  </AnimatePresence>
+                </div>
+                <div 
+                  className={isMobile 
+                    ? "flex gap-3 justify-center" 
+                    : "flex gap-6 absolute left-0"
+                  } 
+                  style={!isMobile ? { bottom: '28px' } : {}}
+                >
+                  <button
+                    className={`${isMobile ? 'w-9 h-9' : 'w-11 h-11'} rounded-full flex items-center justify-center cursor-pointer transition-all duration-300 border-none bg-primary hover:bg-secondary`}
+                    onClick={handlePrev}
+                    onMouseEnter={() => setHoverPrev(true)}
+                    onMouseLeave={() => setHoverPrev(false)}
+                    aria-label="Previous testimonial"
+                  >
+                    <FaArrowLeft size={isMobile ? 20 : 28} className="text-primary-foreground" />
+                  </button>
+                  <button
+                    className={`${isMobile ? 'w-9 h-9' : 'w-11 h-11'} rounded-full flex items-center justify-center cursor-pointer transition-all duration-300 border-none bg-primary hover:bg-secondary`}
+                    onClick={handleNext}
+                    onMouseEnter={() => setHoverNext(true)}
+                    onMouseLeave={() => setHoverNext(false)}
+                    aria-label="Next testimonial"
+                  >
+                    <FaArrowRight size={isMobile ? 20 : 28} className="text-primary-foreground" />
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+        {/* Bottom Button AOS */}
+        <div data-aos="fade-up" data-aos-delay="330" className="flex justify-center mt-12">
+          {/* Place your button here, or wrap the existing button in this div if already present */}
+        </div>
+      </section>
   );
 };
 

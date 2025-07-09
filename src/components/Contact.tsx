@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -71,32 +72,23 @@ const Contact = () => {
   const fadeRef = useFadeInSection();
 
   return (
-    <section id="contact" className="py-20 relative z-10" style={{ marginTop: 0 }}>
-      <div className="max-w-6xl mx-auto px-8 relative z-10" data-aos="fade-up" ref={fadeRef}>
-        {/* Background blur balls */}
-        <div className="pointer-events-none absolute inset-0 -z-10">
-          <div className="absolute bottom-10 left-24 w-80 h-80 bg-[#ccb533] rounded-full blur-3xl opacity-15"></div>
-          <div className="absolute bottom-24 right-32 w-80 h-80 bg-[#ccb533] rounded-full blur-3xl opacity-12"></div>
-          <div className="absolute bottom-20 left-1/2 w-80 h-80 bg-[#031636] rounded-full blur-3xl opacity-15"></div>
-          <div className="absolute bottom-0 right-10 w-80 h-80 bg-[#031636] rounded-full blur-3xl opacity-12"></div>
-          <div className="absolute top-44 left-0 w-72 h-72 bg-[#031636] rounded-full blur-3xl opacity-25"></div>
-        </div>
+    <section id="contact" className="relative z-10 pt-[256px] md:pt-[256px] pb-20 md:pb-24">
+      <div className="max-w-6xl mx-auto px-4 md:px-8 relative z-10" data-aos="fade-up" ref={fadeRef}>
 
-        <div className="text-center mb-16 relative">
-          <h2 className="quentin-font text-4xl md:text-5xl font-bold text-[#031636] mb-6">
-            Let's make it a reality!
+        <div className="text-center mb-6 md:mb-10 relative">
+          <h2 className="quentin-font text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-5">
+          I wear a lot of watches
           </h2>
-          <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 w-64 h-64 bg-[#ccb533] rounded-full blur-3xl opacity-20"></div>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto relative z-10">
-            Ready to start your project? Fill out the form below and let's create something amazing together!
+          <p className="text-base md:text-xl text-white max-w-2xl mx-auto relative z-10 mb-[84px]">
+          ~but that's just a hobby, here's how we can engage~
           </p>
         </div>
 
-        <div className="bg-white/20 backdrop-blur-md rounded-3xl p-8 md:p-12 border border-white/20 shadow-2xl">
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="grid md:grid-cols-2 gap-6">
+        <div className="bg-white/20 backdrop-blur-md rounded-2xl md:rounded-3xl p-4 md:p-6 lg:p-8 border border-white/20 shadow-2xl">
+          <form onSubmit={handleSubmit} className="space-y-3 md:space-y-6">
+            <div className="grid md:grid-cols-2 gap-3 md:gap-6">
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-[#031636] mb-2">
+                <label htmlFor="name" className="block text-sm font-medium text-white mb-2">
                   Your Name *
                 </label>
                 <Input
@@ -107,13 +99,13 @@ const Contact = () => {
                   value={formData.name}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 rounded-xl border border-black bg-white/50 backdrop-blur-sm"
+                  className="w-full px-3 py-2 md:px-4 md:py-3 text-sm md:text-base rounded-lg md:rounded-xl border border-black bg-white/50 backdrop-blur-sm"
                   placeholder="Name"
                 />
               </div>
 
               <div>
-                <label htmlFor="organizationName" className="block text-sm font-medium text-[#031636] mb-2">
+                <label htmlFor="organizationName" className="block text-sm font-medium text-white mb-2">
                   Your Organization's Name *
                 </label>
                 <Input
@@ -124,15 +116,15 @@ const Contact = () => {
                   value={formData.organizationName}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 rounded-xl border border-black bg-white/50 backdrop-blur-sm"
+                  className="w-full px-3 py-2 md:px-4 md:py-3 text-sm md:text-base rounded-lg md:rounded-xl border border-black bg-white/50 backdrop-blur-sm"
                   placeholder="Your Organization's Name"
                 />
               </div>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-6">
+            <div className="grid md:grid-cols-2 gap-3 md:gap-6">
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-[#031636] mb-2">
+                <label htmlFor="email" className="block text-sm font-medium text-white mb-2">
                   Your Email *
                 </label>
                 <Input
@@ -143,13 +135,13 @@ const Contact = () => {
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 rounded-xl border border-black bg-white/50 backdrop-blur-sm"
+                  className="w-full px-3 py-2 md:px-4 md:py-3 text-sm md:text-base rounded-lg md:rounded-xl border border-black bg-white/50 backdrop-blur-sm"
                   placeholder="Your Email"
                 />
               </div>
 
               <div>
-                <label htmlFor="contact" className="block text-sm font-medium text-[#031636] mb-2">
+                <label htmlFor="contact" className="block text-sm font-medium text-white mb-2">
                   Your Contact *
                 </label>
                 <Input
@@ -160,14 +152,14 @@ const Contact = () => {
                   value={formData.contact}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 rounded-xl border border-black bg-white/50 backdrop-blur-sm"
+                  className="w-full px-3 py-2 md:px-4 md:py-3 text-sm md:text-base rounded-lg md:rounded-xl border border-black bg-white/50 backdrop-blur-sm"
                   placeholder="Your Contact"
                 />
               </div>
             </div>
 
             <div>
-              <label htmlFor="website" className="block text-sm font-medium text-[#031636] mb-2">
+              <label htmlFor="website" className="block text-sm font-medium text-white mb-2">
                 Website / Social Media Link *
               </label>
               <Input
@@ -178,16 +170,16 @@ const Contact = () => {
                 value={formData.website}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 rounded-xl border border-black bg-white/50 backdrop-blur-sm"
+                className="w-full px-3 py-2 md:px-4 md:py-3 text-sm md:text-base rounded-lg md:rounded-xl border border-black bg-white/50 backdrop-blur-sm"
                 placeholder="Your Website"
               />
             </div>
 
             <div>
-              <span className="block text-sm font-medium text-[#031636] mb-4">
+              <span className="block text-sm font-medium text-white mb-3 md:mb-4">
                 What services are you interested in?
               </span>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                 {[
                   'Logo design',
                   'Brand identity development',
@@ -204,7 +196,7 @@ const Contact = () => {
                         checked={formData.services.includes(service)}
                         onCheckedChange={(checked) => handleServiceChange(service, !!checked)}
                       />
-                      <label htmlFor={safeId} className="text-sm text-[#031636]">
+                      <label htmlFor={safeId} className="text-sm text-white">
                         {service}
                       </label>
                     </div>
@@ -215,7 +207,7 @@ const Contact = () => {
 
             {/* Budget Field */}
             <div>
-              <span id="budget-label" className="block text-sm font-medium text-[#031636] mb-2">
+              <span id="budget-label" className="block text-sm font-medium text-white mb-2">
                 How much are you looking to invest on this project? *
               </span>
               {/* Hidden real select for autofill */}
@@ -235,7 +227,7 @@ const Contact = () => {
                 <option value="20+ Thousand">₹ 20+ Thousand</option>
               </select>
               <Select aria-labelledby="budget-label" onValueChange={(value) => handleSelectChange('budget', value)}>
-                <SelectTrigger className="w-full px-4 py-3 rounded-xl border border-black bg-white/50 backdrop-blur-sm">
+                <SelectTrigger className="w-full px-3 py-2 md:px-4 md:py-3 text-sm md:text-base rounded-lg md:rounded-xl border border-black bg-white/50 backdrop-blur-sm">
                   <SelectValue placeholder="Select your budget" />
                 </SelectTrigger>
                 <SelectContent>
@@ -249,7 +241,7 @@ const Contact = () => {
 
             {/* Hear About Us Field */}
             <div>
-              <span id="hear-about-label" className="block text-sm font-medium text-[#031636] mb-2">
+              <span id="hear-about-label" className="block text-sm font-medium text-white mb-2">
                 And lastly, how did you hear about us? *
               </span>
               {/* Hidden real select for autofill */}
@@ -270,7 +262,7 @@ const Contact = () => {
                 <option value="other">Other</option>
               </select>
               <Select aria-labelledby="hear-about-label" onValueChange={(value) => handleSelectChange('hearAbout', value)}>
-                <SelectTrigger className="w-full px-4 py-3 rounded-xl border border-black bg-white/50 backdrop-blur-sm">
+                <SelectTrigger className="w-full px-3 py-2 md:px-4 md:py-3 text-sm md:text-base rounded-lg md:rounded-xl border border-black bg-white/50 backdrop-blur-sm">
                   <SelectValue placeholder="Select how you heard about us" />
                 </SelectTrigger>
                 <SelectContent>
@@ -284,7 +276,7 @@ const Contact = () => {
             </div>
 
             <div>
-              <label htmlFor="message" className="block text-sm font-medium text-[#031636] mb-2">
+              <label htmlFor="message" className="block text-sm font-medium text-white mb-2">
                 Additional Message
               </label>
               <Textarea
@@ -293,31 +285,31 @@ const Contact = () => {
                 autoComplete="off"
                 value={formData.message}
                 onChange={handleChange}
-                rows={4}
-                className="w-full px-4 py-3 rounded-xl border border-black bg-white/50 backdrop-blur-sm resize-none"
+                rows={3}
+                className="w-full px-3 py-2 md:px-4 md:py-3 text-sm md:text-base rounded-lg md:rounded-xl border border-black bg-white/50 backdrop-blur-sm resize-none"
                 placeholder="Tell me about your project and how I can help..."
               />
             </div>
 
             <Button
               type="submit"
-              className="w-full bg-[#031636] hover:bg-[#031636]/90 text-white py-4 rounded-xl transition-all duration-300 hover:scale-105 shadow-lg"
+              className="w-full bg-[#031636] hover:bg-[#031636]/90 text-white py-3 md:py-4 text-sm md:text-base rounded-lg md:rounded-xl transition-all duration-300 hover:scale-105 shadow-lg"
             >
               Let's Connect!
             </Button>
           </form>
 
-          <div className="mt-12 pt-8 border-t border-white/20">
-            <p className="text-center text-gray-600 mb-6">Or connect with me on social media</p>
-            <div className="flex justify-center space-x-6">
-              <a href="https://www.instagram.com/nevedpaharia/" target="_blank" rel="noopener noreferrer" className="p-3 bg-white/30 backdrop-blur-sm rounded-full shadow-md hover:shadow-lg hover:scale-110 transition-all duration-300 border border-white/20">
-                <Instagram className="w-6 h-6 transition-all duration-300 ease-in-out" />
+          <div className="mt-4 md:mt-12 pt-4 md:pt-8 border-t border-white/20">
+            <p className="text-center text-white mb-4 md:mb-6 text-sm md:text-base">Or connect with me on social media</p>
+            <div className="flex justify-center space-x-4 md:space-x-6">
+              <a href="https://www.instagram.com/nevedpaharia/" target="_blank" rel="noopener noreferrer" className="p-2 md:p-3 bg-white/30 backdrop-blur-sm rounded-full shadow-md hover:shadow-lg hover:scale-110 transition-all duration-300 border border-white/20">
+                <Instagram className="w-5 h-5 md:w-6 md:h-6 transition-all duration-300 ease-in-out" />
               </a>
-              <a href="https://www.behance.net/" target="_blank" rel="noopener noreferrer" className="p-3 bg-white/30 backdrop-blur-sm rounded-full shadow-md hover:shadow-lg hover:scale-110 transition-all duration-300 border border-white/20">
-                <img src="/behance.svg" alt="Behance" className="w-6 h-6" style={{ filter: 'none' }} />
+              <a href="https://www.behance.net/nevedpaharia" target="_blank" rel="noopener noreferrer" className="p-2 md:p-3 bg-white/30 backdrop-blur-sm rounded-full shadow-md hover:shadow-lg hover:scale-110 transition-all duration-300 border border-white/20">
+                <img src="/behance.svg" alt="Behance" className="w-5 h-5 md:w-6 md:h-6" style={{ filter: 'none' }} />
               </a>
-              <a href="https://www.facebook.com/nevedpaharia/" target="_blank" rel="noopener noreferrer" className="p-3 bg-white/30 backdrop-blur-sm rounded-full shadow-md hover:shadow-lg hover:scale-110 transition-all duration-300 border border-white/20">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="2 2 20 20" stroke="#031636" strokeWidth="1.5" className="w-6 h-6" style={{ display: 'block', margin: '0 auto' }}>
+              <a href="https://www.facebook.com/nevedpaharia/" target="_blank" rel="noopener noreferrer" className="p-2 md:p-3 bg-white/30 backdrop-blur-sm rounded-full shadow-md hover:shadow-lg hover:scale-110 transition-all duration-300 border border-white/20">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="2 2 20 20" stroke="#031636" strokeWidth="1.5" className="w-5 h-5 md:w-6 md:h-6" style={{ display: 'block', margin: '0 auto' }}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M15.5 3.5h-2A3.5 3.5 0 0 0 10 7v2H8.5a.5.5 0 0 0-.5.5v2a.5.5 0 0 0 .5.5H10v7.5a.5.5 0 0 0 .5.5h2a.5.5 0 0 0 .5-.5V12h1.5a.5.5 0 0 0 .5-.5v-2a.5.5 0 0 0-.5-.5H13V7a1 1 0 0 1 1-1h1.5a.5.5 0 0 0 .5-.5v-2a.5.5 0 0 0-.5-.5z"/>
                 </svg>
               </a>
