@@ -8,6 +8,7 @@ import NotFound from './pages/NotFound';
 import BackgroundLayers from './components/BackgroundLayers';
 import React, { useEffect } from 'react';
 import Lenis from '@studio-freight/lenis';
+import clarity from '@microsoft/clarity';
 
 const App = () => {
   useEffect(() => {

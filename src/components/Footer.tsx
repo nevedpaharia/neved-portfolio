@@ -45,7 +45,7 @@ const Footer = () => {
           <div className="flex justify-center justify-self-center">
             <img
               src="/logo.png"
-              alt="Neved Logo"
+              alt="Neved Paharia Portfolio Logo" 
               className="w-20 md:w-28 h-auto object-contain"
               loading="lazy"
             />

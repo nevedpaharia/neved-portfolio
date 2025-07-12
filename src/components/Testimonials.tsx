@@ -288,7 +288,7 @@ const Testimonials = () => {
                   >
                     <img 
                       src={testimonial.src} 
-                      alt={testimonial.name}
+                      alt={`Testimonial from ${testimonial.name}, ${testimonial.designation} - Brand Identity Client`} 
                       className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
                       loading="lazy"
                       onError={(e) => {

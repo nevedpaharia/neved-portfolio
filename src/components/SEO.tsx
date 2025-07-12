@@ -16,9 +16,9 @@ interface SEOProps {
 }
 
 const SEO: React.FC<SEOProps> = ({
-  title = "Neved Paharia ✦ Brand Identity Designer & Creative Director",
-  description = "Neved Paharia is a self-taught brand identity designer from India, specializing in logo design, brand identity development, and visual design. Creating magnetic brand identities that connect with audiences.",
-  keywords = "brand identity designer, logo design, graphic design, visual design, brand consultation, packaging design, India designer, creative director",
+  title = "Neved Paharia ✦ Personal Portfolio ✦ Brand Identity Designer | Logo Design, Brand Strategy, Visual Storytelling",
+  description = "Award-winning brand identity designer from India. Specializing in logo design, brand strategy, and visual storytelling for businesses seeking a magnetic, memorable brand presence.",
+  keywords = "brand identity designer, logo design, brand strategy, visual storytelling, India designer, creative director, portfolio",
   image = "https://nevedpaharia.com/og-image.jpg",
   url = "https://nevedpaharia.com",
   type = "website",
@@ -40,7 +40,7 @@ const SEO: React.FC<SEOProps> = ({
       <meta name="author" content={author} />
       
       {/* Canonical URL */}
-      <link rel="canonical" href={url} />
+      <link rel="canonical" href="https://nevedpaharia.com/" />
       
       {/* Open Graph / Facebook */}
       <meta property="og:type" content={type} />
@@ -77,7 +77,7 @@ const SEO: React.FC<SEOProps> = ({
       <script type="application/ld+json">
         {JSON.stringify({
           "@context": "https://schema.org",
-          "@type": type === "article" ? "Article" : "Person",
+          "@type": ["Person", "WebSite"],
           "name": "Neved Paharia",
           "jobTitle": "Brand Identity Designer",
           "description": description,
@@ -96,10 +96,7 @@ const SEO: React.FC<SEOProps> = ({
           "address": {
             "@type": "PostalAddress",
             "addressCountry": "IN"
-          },
-          ...(publishedTime && { "datePublished": publishedTime }),
-          ...(modifiedTime && { "dateModified": modifiedTime }),
-          ...(tags.length > 0 && { "keywords": tags.join(", ") })
+          }
         })}
       </script>
     </Helmet>

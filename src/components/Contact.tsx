@@ -9,17 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Linkedin, Instagram, Mail } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 
-// Declare Tawk_API for TypeScript
-declare global {
-  interface Window {
-    Tawk_API?: {
-      showWidget: () => void;
-      hideWidget: () => void;
-      maximize: () => void;
-      minimize: () => void;
-    };
-  }
-}
+// Remove Tawk_API TypeScript declaration and isChatOpen state
 import { useFadeInSection } from '@/hooks/use-fade-in-section';
 import { useScaleUpSection, layeredTextVariants, layeredContainerVariants } from '@/hooks/use-scale-up-section';
 
@@ -35,7 +25,7 @@ const Contact = () => {
     hearAbout: '',
     message: ''
   });
-  const [isChatOpen, setIsChatOpen] = useState(false);
+  // Removed: const [isChatOpen, setIsChatOpen] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -116,49 +106,19 @@ const Contact = () => {
         </motion.div>
 
         <div className="bg-white/20 backdrop-blur-md radius-2xl md:radius-3xl p-4 md:p-6 lg:p-8 border border-white/20 shadow-xl" ref={scaleUpRef}>
-          {/* Modern, Light, Relaxed Contact Section Header */}
+          {/* Calendly Button Only, full width, prominent, mobile responsive */}
           <div className="flex flex-col items-center text-center space-y-4 mb-8">
             <p className="text-base md:text-lg font-montserrat text-white/60 text-center">
-              Pick your style: now or later...
+              Got a quick question? Let’s clear it in 30 minutes.
             </p>
-            <div className="grid grid-cols-2 gap-3 md:gap-6 w-full mb-8">
-              <button
-                type="button"
-                onClick={() => {
-                  if (window.Tawk_API) {
-                    if (!isChatOpen) {
-                      if (typeof window.Tawk_API.showWidget === 'function') {
-                        window.Tawk_API.showWidget();
-                      }
-                      if (typeof window.Tawk_API.maximize === 'function') {
-                        window.Tawk_API.maximize();
-                      }
-                      setIsChatOpen(true);
-                    } else {
-                      if (typeof window.Tawk_API.minimize === 'function') {
-                        window.Tawk_API.minimize();
-                      }
-                      if (typeof window.Tawk_API.hideWidget === 'function') {
-                        window.Tawk_API.hideWidget();
-                      }
-                      setIsChatOpen(false);
-                    }
-                  }
-                }}
-                className="h-10 rounded-md text-base md:text-sm font-normal font-montserrat text-white bg-[#0D1B2A] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#0D1B2A] focus:ring-offset-2 hover:scale-105 w-full"
-                style={{ boxShadow: '0 2px 8px 0 rgba(13,27,42,0.08)' }}
-              >
-                {isChatOpen ? '❌ Close Live Chat' : '💬 Start a Live Chat'}
-              </button>
-              <button
-                type="button"
-                className="h-10 rounded-md text-base md:text-sm font-normal font-montserrat text-white bg-[#0D1B2A] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#0D1B2A] focus:ring-offset-2 hover:scale-105 w-full"
-                style={{ boxShadow: '0 2px 8px 0 rgba(13,27,42,0.08)' }}
-                onClick={() => window.open('https://calendly.com/nevedpaharia/30min', '_blank')}
-              >
-                📅 Schedule a Meeting
-              </button>
-            </div>
+            <button
+              type="button"
+              className="w-full h-12 md:h-14 rounded-md text-base md:text-lg font-bold font-montserrat text-white bg-[#0D1B2A] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#0D1B2A] focus:ring-offset-2 hover:scale-105 shadow-md"
+              style={{ boxShadow: '0 2px 8px 0 rgba(13,27,42,0.08)' }}
+              onClick={() => window.open('https://calendly.com/nevedpaharia/30min', '_blank')}
+            >
+              📅 Book a Calendly Call
+            </button>
           </div>
 
           {/* Details Prompt */}
@@ -388,7 +348,7 @@ const Contact = () => {
                 <Instagram className="w-5 h-5 md:w-6 md:h-6 transition-all duration-300 ease-in-out" />
               </a>
               <a href="https://www.behance.net/nevedpaharia" target="_blank" rel="noopener noreferrer" className="p-2 md:p-3 bg-white/30 backdrop-blur-sm radius-full shadow-sm hover:shadow-md hover:scale-110 transition-all duration-300 border border-white/20">
-                <img src="/behance.svg" alt="Behance" className="w-5 h-5 md:w-6 md:h-6" style={{ filter: 'none' }} loading="lazy" />
+                <img src="/behance.svg" alt="Behance Profile of Neved Paharia" className="w-5 h-5 md:w-6 md:h-6" style={{ filter: 'none' }} loading="lazy" />
               </a>
               <a href="https://www.facebook.com/nevedpaharia/" target="_blank" rel="noopener noreferrer" className="p-2 md:p-3 bg-white/30 backdrop-blur-sm radius-full shadow-sm hover:shadow-md hover:scale-110 transition-all duration-300 border border-white/20">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="2 2 20 20" stroke="#031636" strokeWidth="1.5" className="w-5 h-5 md:w-6 md:h-6" style={{ display: 'block', margin: '0 auto' }}>

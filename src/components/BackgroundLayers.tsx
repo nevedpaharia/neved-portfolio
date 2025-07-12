@@ -16,7 +16,7 @@ const BackgroundLayers: React.FC = () => (
     {/* Single Background Image */}
     <img
       src="/background/background.webp"
-      alt="Background"
+      alt="Neved Paharia Portfolio Website Background Texture"
       loading="lazy"
       style={{
         position: 'absolute',

@@ -80,14 +80,14 @@ const About = () => {
     setImageError(true);
   };
 
-  const paragraph1 = "I'm an 18-year-old self-taught designer from India who started early and never stopped creating. I craft clean, intentional visuals across logos, layouts, and brand identities, always blending precision with personality.";
-  const paragraph2 = "Deeply passionate about tech and obsessed with the finer details, I see every project as a chance to push creative boundaries. Whether you're across the street or across the globe — if you value good design, we'll probably get along.";
+  const paragraph1 = "At 18, I taught myself design and never looked back, turning big ideas into striking brand identities. From logos to full layout systems, I fuse strategy with style so every visual drives engagement and leaves a mark.";
+  const paragraph2 = "A tech‑obsessive who lives for pixel‑perfect details, I treat each project like an experiment in creative excellence. Whether you’re across the street or across the globe — if you value good design, we’ll probably get along.";
 
   const ProfileImage = ({ className }: { className: string }) => (
     <div className={className}>
       <img 
         src="/Professional Photo.webp" 
-        alt="Professional Photo" 
+        alt="Neved Paharia Profile Photo - Brand Identity Designer" 
         className="w-full h-full object-cover"
         loading="lazy"
       />

@@ -3,7 +3,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { useScaleUpSection, scaleUpVariants, scaleUpContainerVariants, layeredTextVariants, layeredContainerVariants } from '@/hooks/use-scale-up-section';
 
-const ProjectCard = ({ title, description, link, thumbnail, video }) => {
+const ProjectCard = ({ title, description, link, thumbnail, video, buttonLabel, subtitle }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [showVideo, setShowVideo] = useState(false);
   const [isVideoReady, setIsVideoReady] = useState(false);
@@ -123,7 +123,7 @@ const ProjectCard = ({ title, description, link, thumbnail, video }) => {
           >
             <img
               src={thumbnail}
-              alt={title}
+              alt={`Project: ${title} - Brand Identity Portfolio by Neved Paharia`}
               className="w-full h-full object-cover bg-black"
               loading="lazy"
             />
@@ -157,11 +157,16 @@ const ProjectCard = ({ title, description, link, thumbnail, video }) => {
           <h3 className="text-2xl md:text-3xl font-bold font-montserrat">
             {title}
           </h3>
+          {subtitle && (
+            <p className="text-lg md:text-xl font-montserrat text-white mb-2">
+              {subtitle}
+            </p>
+          )}
           <p className="mt-2 text-base opacity-70 font-montserrat">
             {description}
           </p>
           <div className="mt-4 flex items-center gap-2 text-sm font-bold font-montserrat">
-            <span>View case</span>
+            <span>{buttonLabel || 'View case'}</span>
             <span className="transform transition-transform duration-300 group-hover:translate-x-2">
               →
             </span>
@@ -227,28 +232,34 @@ export default function Projects() {
         <motion.div data-aos="fade-up" data-aos-delay="200" variants={layeredTextVariants}>
           <ProjectCard
             title="EcoWrap | The Freshness Guardian"
+            subtitle="Cut waste, stay fresh."
             description="EcoWrap isn't just another food wrap—it's your kitchen's eco‑guardian. Made from 100% biodegradable fibers, it locks in flavor, cuts down waste, and even gives you spoilage alerts via smart indicators. Fresh food, guilt‑free planet. With EcoWrap, sustainability and smart living go hand in hand. It's the smarter, greener way to keep your meals at their best."
             link="https://www.behance.net/gallery/199356901/EcoWrap-Branding"
             thumbnail="/project highlights/1.webp"
             video="/project highlights/1.webm"
+            buttonLabel="Discover the Process"
           />
         </motion.div>
         <motion.div data-aos="fade-up" data-aos-delay="300" variants={layeredTextVariants}>
           <ProjectCard
             title="Soch | Voices Unheard"
+            subtitle="Friendship in face of odds."
             description="Soch dives deep into teenage turmoil. Neha, a fearless tomboy, and Nitin, wrestling depression, forge an unlikely bond. Written, directed, and edited by me—this school prize‑winning short film flips the script on friendship, resilience, and breaking free. Every frame is a testament to the power of honest storytelling. The film's raw emotion and nuanced characters invite viewers to reflect on their own journeys."
             link="https://www.behance.net/gallery/211353215/Soch-Short-Film"
             thumbnail="/project highlights/2.webp"
             video="/project highlights/2.webm"
+            buttonLabel="Experience the Impact"
           />
         </motion.div>
         <motion.div data-aos="fade-up" data-aos-delay="400" variants={layeredTextVariants}>
           <ProjectCard
             title="Team Mighty | Brand of Champions"
+            subtitle="Strength through unified identity."
             description="Born in March 2021, Team Mighty stormed India's mobile‑gaming scene. I spearheaded their visual identity—an emblem of strength, unity, and dominance across CODM, BGMI, and Free Fire. Though the clan's journey ended, its legacy roars on. Their story is proof that great design can inspire greatness."
             link="https://www.behance.net/gallery/133855915/Team-Mighty-Branding"
             thumbnail="/project highlights/3.webp"
             video="/project highlights/3.webm"
+            buttonLabel="Unveil the Details"
           />
         </motion.div>
       </motion.div>

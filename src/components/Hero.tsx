@@ -93,7 +93,7 @@ const Hero: React.FC = () => {
               <button onClick={() => scrollToSection('home')} className="focus:outline-none focus-visible:ring-2 focus-visible:ring-accent">
                 <img
                   src="/logo.png"
-                  alt="Logo"
+                  alt="Neved Paharia Portfolio Logo"
                   width={86}
                   height={34}
                   className="object-contain"
@@ -141,7 +141,7 @@ const Hero: React.FC = () => {
             <button onClick={() => scrollToSection('home')} className="focus:outline-none focus-visible:ring-2 focus-visible:ring-accent">
               <img
                 src="/logo.png"
-                alt="Logo"
+                alt="Neved Paharia Portfolio Logo"
                 width={108}
                 height={43}
                 className="object-contain mx-auto"
@@ -254,7 +254,7 @@ const Hero: React.FC = () => {
                 onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#14213d'; }}
                 onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#14213d'; }}
               >
-                Let's work together
+                Book a Free Call
               </Button>
             </div>
           </motion.div>
