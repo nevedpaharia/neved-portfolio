@@ -5,14 +5,8 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
-import {
-  useScaleUpSection,
-  scaleUpVariants,
-  scaleUpContainerVariants,
-  layeredTextVariants,
-  layeredContainerVariants,
-  buttonGroupVariants,
-} from '@/hooks/use-scale-up-section';
+import { useScaleUpSection } from '@/hooks/use-scale-up-section';
+import { useReducedMotion } from '@/hooks/use-reduced-motion';
 import { Menu, X, ChevronDown } from 'lucide-react';
 
 const Hero: React.FC = () => {
@@ -21,12 +15,17 @@ const Hero: React.FC = () => {
   const [typewriterText, setTypewriterText] = useState('');
   const isMobile = useIsMobile();
   const scaleUpRef = useScaleUpSection();
+  const prefersReducedMotion = useReducedMotion();
 
   // Add scroll-based floating animation for the brush underline
   const { scrollYProgress } = useScroll({
     offset: ['start end', 'end start'],
   });
-  const floatingY = useTransform(scrollYProgress, [0, 1], [40, 0]);
+  const floatingY = useTransform(
+    scrollYProgress, 
+    [0, 1], 
+    prefersReducedMotion ? [0, 0] : [40, 0]
+  );
 
   const fullText = 'Recommended by my Mother';
 
@@ -49,6 +48,12 @@ const Hero: React.FC = () => {
 
   useEffect(() => {
     if (animationStep >= 6) {
+      if (prefersReducedMotion) {
+        // Show full text immediately for users who prefer reduced motion
+        setTypewriterText(fullText);
+        return;
+      }
+      
       const delay = setTimeout(() => {
         let i = 0;
         const typewriterTimer = setInterval(() => {
@@ -62,7 +67,7 @@ const Hero: React.FC = () => {
       }, 800);
       return () => clearTimeout(delay);
     }
-  }, [animationStep, fullText]);
+  }, [animationStep, fullText, prefersReducedMotion]);
 
   const scrollToSection = (id: string): void => {
     const section = document.getElementById(id);
@@ -97,6 +102,9 @@ const Hero: React.FC = () => {
                   width={86}
                   height={34}
                   className="object-contain"
+                  loading="eager"
+                  fetchpriority="high"
+                  {...{ fetchpriority: 'high' }}
                   onError={(e) => {
                     e.currentTarget.style.display = 'none';
                     e.currentTarget.parentElement!.innerHTML =
@@ -145,6 +153,9 @@ const Hero: React.FC = () => {
                 width={108}
                 height={43}
                 className="object-contain mx-auto"
+                loading="eager"
+                fetchpriority="high"
+                {...{ fetchpriority: 'high' }}
                 onError={(e) => {
                   e.currentTarget.style.display = 'none';
                   e.currentTarget.parentElement!.innerHTML =
@@ -167,43 +178,25 @@ const Hero: React.FC = () => {
 
       {/* Hero Body */}
       <div className="relative flex flex-col items-center justify-center text-white text-center px-4 pt-[10vh] min-h-[100vh]">
-        <motion.div
-          className="relative z-10 max-w-4xl w-full"
-          variants={scaleUpContainerVariants}
-          initial="hidden"
-          animate="visible"
-          ref={scaleUpRef}
-        >
+        <div className="relative z-10 max-w-4xl w-full" ref={scaleUpRef}>
           {/* Startup Daydreamer */}
-          <motion.div
-            className="flex justify-center items-center gap-2 text-white font-light mx-auto text-center"
-            style={{ fontSize: '0.9rem', marginBottom: '-0.25rem' }}
-            variants={layeredTextVariants}
-          >
+          <div className="flex justify-center items-center gap-2 text-white font-light mx-auto text-center" style={{ fontSize: '0.9rem', marginBottom: '-0.25rem' }}>
             <span className="text-lg">🚀</span>
             <span>Hey, Startup Daydreamer</span>
-          </motion.div>
+          </div>
 
           {/* Headline */}
-          <motion.h1
-            className="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight mx-auto"
-            style={{ lineHeight: 1.35, marginBottom: '-0.25rem' }}
-            variants={layeredTextVariants}
-          >
+          <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight mx-auto" style={{ lineHeight: 1.35, marginBottom: '-0.25rem' }}>
             I forge <span className="relative inline-block align-baseline">
               <span className="relative inline-block">
                 <span className="z-10 relative">magnetic</span>
-                <motion.img
+                <img
                   src="/brush-underline.svg"
                   alt=""
                   className="absolute left-0 right-0 w-full h-2 bottom-[-2px] pointer-events-none origin-left"
-                  initial={{ scaleX: 0 }}
-                  animate={{ scaleX: 1 }}
-                  transition={{
-                    duration: 1.2,
-                    ease: [0.42, 0, 0.58, 1],
-                    delay: 0.8,
-                  }}
+                  loading="eager"
+                  fetchpriority="high"
+                  {...{ fetchpriority: 'high' }}
                   onError={(e) => {
                     e.currentTarget.style.display = 'none';
                   }}
@@ -211,21 +204,17 @@ const Hero: React.FC = () => {
               </span>
             </span> brand<br />
             identities
-          </motion.h1>
+          </h1>
 
           {/* Subtitle */}
-          <motion.div className="mx-auto" variants={layeredTextVariants}>
+          <div className="mx-auto">
             <p className="font-light text-white max-w-4xl mx-auto" style={{ fontSize: '1rem', marginBottom: '2.5rem' }}>
               ~no half‑measures, pure impact.~
             </p>
-          </motion.div>
+          </div>
 
           {/* Button Group */}
-          <motion.div
-            className="flex flex-col sm:flex-row gap-[1.5rem] justify-center items-center"
-            style={{ marginTop: '2rem' }}
-            variants={buttonGroupVariants}
-          >
+          <div className="flex flex-col sm:flex-row gap-[1.5rem] justify-center items-center" style={{ marginTop: '2rem' }}>
             <Button
               onClick={() => scrollToSection('projects')}
               className="bg-white text-[#14213d] px-6 py-3 radius-full text-sm font-medium shadow-lg h-11 hover:bg-gray-200 hover:text-[#14213d]"
@@ -257,14 +246,10 @@ const Hero: React.FC = () => {
                 Book a Free Call
               </Button>
             </div>
-          </motion.div>
+          </div>
 
           {/* Social Proof (stars/recommended) - below button group */}
-          <motion.div
-            className="flex justify-center items-center gap-1 text-xs text-white/70 opacity-70"
-            style={{ marginTop: '3rem' }}
-            variants={layeredTextVariants}
-          >
+          <div className="flex justify-center items-center gap-1 text-xs text-white/70 opacity-70" style={{ marginTop: '3rem' }}>
             <div className="flex gap-1">
               {[...Array(5)].map((_, i) => (
                 <span
@@ -290,16 +275,13 @@ const Hero: React.FC = () => {
                 <span className="animate-pulse">|</span>
               )}
             </span>
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
         {/* Scroll Arrow - restore to absolute bottom center */}
-        <motion.div
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 animate-slow-bounce z-20"
-          variants={layeredTextVariants}
-        >
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 animate-slow-bounce z-20">
           <span className="text-sm font-light text-white drop-shadow-sm">Scroll</span>
           <ChevronDown size={20} className="text-white drop-shadow-sm" />
-        </motion.div>
+        </div>
       </div>
     </section>
   );

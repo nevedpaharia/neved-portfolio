@@ -4,6 +4,48 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Font loading optimization */
+@font-face {
+  font-family: 'Quentin';
+  src: url('/Quentin.woff2') format('woff2');
+  font-display: swap;
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Quentin';
+  src: url('/Quentin.otf') format('opentype');
+  font-display: swap;
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* System font optimization for better FCP */
+.system-fonts-enabled {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
+}
+
+.system-fonts-enabled h1,
+.system-fonts-enabled h2,
+.system-fonts-enabled h3,
+.system-fonts-enabled h4,
+.system-fonts-enabled h5,
+.system-fonts-enabled h6 {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
+}
+
+/* Optimize font loading for critical content */
+.font-loading-optimized {
+  font-display: swap;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* Fallback for when custom fonts fail to load */
+.font-fallback {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
 /* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
 All colors MUST be HSL.
 */
@@ -99,7 +141,7 @@ All colors MUST be HSL.
   }
 }
 
-/* Custom animations */
+/* Custom animations - respect reduced motion preferences */
 @keyframes fade-in {
   from {
     opacity: 0;
@@ -144,6 +186,17 @@ All colors MUST be HSL.
 
 .animate-pulse-slow {
   animation: pulse-slow 3s ease-in-out infinite;
+}
+
+/* Respect reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in,
+  .animate-fade-up,
+  .animate-pulse-slow {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
 }
 
 .animation-delay-200 {
@@ -198,7 +251,15 @@ html, body {
   animation: brush-reveal 1s ease-out forwards;
 }
 
-/* Hero Animation Styles */
+/* Respect reduced motion preferences for brush animation */
+@media (prefers-reduced-motion: reduce) {
+  .brush-animate {
+    animation: none;
+    transform: scaleX(1);
+  }
+}
+
+/* Hero Animation Styles - respect reduced motion preferences */
 @keyframes morph {
   0% {
     opacity: 0;
@@ -243,6 +304,16 @@ html, body {
 
 .animate-float {
   animation: float 4s ease-in-out infinite alternate;
+}
+
+/* Respect reduced motion preferences for hero animations */
+@media (prefers-reduced-motion: reduce) {
+  .animate-morph,
+  .animate-float {
+    animation: none;
+    opacity: 0.5;
+    transform: scale(1) rotate(0deg);
+  }
 }
 
 /* Stagger the animation delays for a more organic feel */

@@ -34,23 +34,23 @@ const Index = () => {
   }, [isMobile]);
 
   return (
-    <div id="smooth-scroll-wrapper" className="relative min-h-screen">
+    <div id="smooth-scroll-wrapper" className="relative z-10 min-h-screen">
       {!isMobile && <TopProgressBar showBar={showBar} scrollPercent={scrollPercent} />}
       <BackgroundLayers />
       <CustomCursor />
       <Hero />
-      <FadeInSection>
+      <div>
         <About />
-      </FadeInSection>
-      <FadeInSection>
+      </div>
+      <div>
         <Projects />
-      </FadeInSection>
-      <FadeInSection>
+      </div>
+      <div>
         <Testimonials />
-      </FadeInSection>
-      <FadeInSection>
+      </div>
+      <div>
         <Contact />
-      </FadeInSection>
+      </div>
       <Footer />
       {!isMobile && <BottomTaskbar showBar={showBar} />}
     </div>

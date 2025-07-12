@@ -108,5 +108,14 @@ export default defineConfig(({ mode }) => ({
   },
   css: {
     devSourcemap: mode === 'development',
+    // Optimize CSS loading
+    postcss: {
+      plugins: [
+        // Add critical CSS extraction in production
+        ...(mode === 'production' ? [
+          // This would require additional setup for critical CSS extraction
+        ] : [])
+      ]
+    }
   },
 }));

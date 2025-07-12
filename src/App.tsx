@@ -6,6 +6,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import Index from './pages/Index';
 import NotFound from './pages/NotFound';
 import BackgroundLayers from './components/BackgroundLayers';
+import SystemFontOptimizer from './components/SystemFontOptimizer';
 import React, { useEffect } from 'react';
 import Lenis from '@studio-freight/lenis';
 import clarity from '@microsoft/clarity';
@@ -29,17 +30,19 @@ const App = () => {
 
   return (
     <HelmetProvider>
-      <TooltipProvider>
-        <BackgroundLayers />
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
+      <SystemFontOptimizer>
+        <TooltipProvider>
+          <BackgroundLayers />
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </TooltipProvider>
+      </SystemFontOptimizer>
     </HelmetProvider>
   );
 };

@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { useFadeInSection } from '@/hooks/use-fade-in-section';
-import { useScaleUpSection, scaleUpVariants, scaleUpContainerVariants, layeredTextVariants, layeredContainerVariants } from '@/hooks/use-scale-up-section';
+import { useScaleUpSection } from '@/hooks/use-scale-up-section';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { motion, useScroll, useTransform } from 'framer-motion';
 
@@ -14,9 +14,7 @@ const About = () => {
     { name: 'Visual Design', level: 80 }
   ];
 
-  // Use the enhanced scale-up variants
-  const containerVariants = scaleUpContainerVariants;
-  const itemVariants = scaleUpVariants;
+
 
   const fadeRef = useFadeInSection();
   const scaleUpRef = useScaleUpSection();
@@ -105,120 +103,47 @@ const About = () => {
         loading="lazy"
       />
 
-      <motion.div 
-        className="max-w-5xl mx-auto px-4 md:px-6 relative z-10" 
-        ref={fadeRef}
-        style={{
-          scale: sectionScale,
-          opacity: sectionOpacity,
-        }}
-      >
-        <motion.div 
-          className="grid lg:grid-cols-2 gap-6 md:gap-12 items-center"
-          variants={layeredContainerVariants}
-          initial="hidden"
-          animate="visible"
-          ref={scaleUpRef}
-        >
+      <div className="max-w-5xl mx-auto px-4 md:px-6 relative z-10" ref={fadeRef}>
+        <div className="grid lg:grid-cols-2 gap-6 md:gap-12 items-center" ref={scaleUpRef}>
           {!isMobile && (
-            <motion.div className="order-2 lg:order-1" variants={itemVariants}>
+            <div className="order-2 lg:order-1">
               <div className="relative group overflow-visible">
-                <motion.div
+                <div
                   ref={cardRef}
                   className={`inline-block group overflow-hidden radius-lg md:radius-xl bg-white/10 border border-white/20 shadow-md hover:shadow-xl transition-[filter,backdrop-filter,transform] duration-300 ease-in-out hover:-translate-y-2 ${isInView ? 'backdrop-blur-0' : 'backdrop-blur-lg'}`}
-                  style={{
-                    y: floatingY, // Apply floating animation
-                  }}
                 >
                   <div className="aspect-[4/5] bg-gradient-to-br from-gray-100 to-gray-200 dark:from-zinc-800 dark:to-zinc-700 radius-lg md:radius-xl overflow-hidden shadow-xl flex items-center justify-center">
                     <ProfileImage className="w-full h-full" />
                   </div>
                   <div className="absolute -bottom-2 -right-2 md:-bottom-4 md:-right-4 w-12 h-12 md:w-16 md:h-16 bg-primary/20 rounded-full opacity-20"></div>
                   <div className="absolute -top-2 -left-2 md:-top-4 md:-left-4 w-8 h-8 md:w-12 md:h-12 bg-secondary/20 rounded-full opacity-20"></div>
-                </motion.div>
+                </div>
               </div>
-            </motion.div>
+            </div>
           )}
-
-          <motion.div className={`${isMobile ? 'order-1' : 'order-1 lg:order-2'} relative`} variants={itemVariants}>
+          <div className={`${isMobile ? 'order-1' : 'order-1 lg:order-2'} relative`}>
             {isMobile && (
-              <motion.div className="float-right ml-4 mb-4" variants={itemVariants}>
-                <motion.div 
-                  className="w-16 h-16 radius-full overflow-hidden bg-white/10 backdrop-blur-lg border border-white/20 shadow-md"
-                  style={{
-                    y: floatingY, // Apply floating animation to mobile image too
-                  }}
-                >
+              <div className="float-right ml-4 mb-4">
+                <div className="w-16 h-16 radius-full overflow-hidden bg-white/10 backdrop-blur-lg border border-white/20 shadow-md">
                   <ProfileImage className="w-full h-full" />
-                </motion.div>
-              </motion.div>
+                </div>
+              </div>
             )}
 
-            <motion.h2 
-              className="quentin-font text-4xl md:text-5xl lg:text-6xl font-bold text-primary mb-3 md:mb-6"
-              variants={layeredTextVariants}
-            >
+            <h2 className="quentin-font text-4xl md:text-5xl lg:text-6xl font-bold text-primary mb-3 md:mb-6">
               About Me
-            </motion.h2>
+            </h2>
 
-            <motion.div className="prose prose-base md:prose-lg text-gray-600 dark:text-gray-300 mb-4 md:mb-6" variants={layeredTextVariants}>
-              {isVisible && (
-                <motion.p className="mb-3 md:mb-4 text-sm md:text-base">
-                  {paragraph1.split(" ").map((word, i) => (
-                    <motion.span
-                      key={i}
-                      initial={{
-                        filter: "blur(0.5rem)",
-                        opacity: 0,
-                        y: 5,
-                      }}
-                      animate={{
-                        filter: "blur(0rem)",
-                        opacity: 1,
-                        y: 0,
-                      }}
-                      transition={{
-                        duration: 0.6,
-                        ease: [0.22, 1, 0.36, 1],
-                        delay: 0.015 * i,
-                      }}
-                      style={{ display: "inline-block" }}
-                    >
-                      {word}&nbsp;
-                    </motion.span>
-                  ))}
-                </motion.p>
-              )}
-              {isVisible && (
-                <motion.p className="mb-3 md:mb-4 text-sm md:text-base">
-                  {paragraph2.split(" ").map((word, i) => (
-                    <motion.span
-                      key={i}
-                      initial={{
-                        filter: "blur(0.5rem)",
-                        opacity: 0,
-                        y: 5,
-                      }}
-                      animate={{
-                        filter: "blur(0rem)",
-                        opacity: 1,
-                        y: 0,
-                      }}
-                      transition={{
-                        duration: 0.6,
-                        ease: [0.22, 1, 0.36, 1],
-                        delay: 0.015 * i + 0.3,
-                      }}
-                      style={{ display: "inline-block" }}
-                    >
-                      {word}&nbsp;
-                    </motion.span>
-                  ))}
-                </motion.p>
-              )}
-            </motion.div>
+            <div className="prose prose-base md:prose-lg text-gray-600 dark:text-gray-300 mb-4 md:mb-6">
+              <p className="mb-3 md:mb-4 text-sm md:text-base">
+                {paragraph1}
+              </p>
+              <p className="mb-3 md:mb-4 text-sm md:text-base">
+                {paragraph2}
+              </p>
+            </div>
 
-            <motion.div className="mb-4 md:mb-6 clear-both" variants={layeredTextVariants}>
+            <div className="mb-4 md:mb-6 clear-both">
               <h3 className="text-base md:text-xl font-bold text-primary mb-3 md:mb-4">Skills & Expertise</h3>
               <div className="space-y-2 md:space-y-3">
                 {skills.map((skill, index) => (
@@ -228,21 +153,15 @@ const About = () => {
                       <span className="text-gray-500 text-xs">{skill.level}%</span>
                     </div>
                     <div className="w-full bg-gray-300 dark:bg-zinc-600 rounded-full h-1 md:h-1.5 relative overflow-hidden">
-                      <motion.div 
+                      <div 
                         className="h-1 md:h-1.5 bg-gradient-to-r from-[#031636] to-[#ccb533] rounded-full absolute top-0 left-0"
-                        initial={{ width: "0%" }}
-                        animate={{ width: skillsVisible ? `${skill.level}%` : "0%" }}
-                        transition={{
-                          duration: 1.2,
-                          ease: [0.22, 1, 0.36, 1],
-                          delay: 0.1 * index,
-                        }}
+                        style={{ width: `${skill.level}%` }}
                       />
                     </div>
                   </div>
                 ))}
               </div>
-            </motion.div>
+            </div>
 
             <a
               href="/Neved Paharia CV.pdf"
@@ -253,9 +172,9 @@ const About = () => {
                 Download CV
               </Button>
             </a>
-          </motion.div>
-        </motion.div>
-      </motion.div>
+          </div>
+        </div>
+      </div>
     </section>
   );
 };

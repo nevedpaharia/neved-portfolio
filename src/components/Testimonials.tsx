@@ -8,7 +8,7 @@ import React, {
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { useFadeInSection } from '@/hooks/use-fade-in-section';
-import { useScaleUpSection, scaleUpVariants, scaleUpContainerVariants, layeredTextVariants, layeredContainerVariants } from '@/hooks/use-scale-up-section';
+import { useScaleUpSection } from '@/hooks/use-scale-up-section';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 const Testimonials = () => {
@@ -181,8 +181,7 @@ const Testimonials = () => {
   }
 
   // Use the enhanced scale-up variants
-  const containerVariants = scaleUpContainerVariants;
-  const itemVariants = scaleUpVariants;
+
 
   // Framer Motion variants for quote
   const quoteVariants = {
@@ -218,54 +217,36 @@ const Testimonials = () => {
         draggable={false}
         aria-hidden="true"
       />
-      <motion.div
+      <div
         className="max-w-6xl mx-auto px-4 md:px-8 pb-4 md:pb-8 relative z-10"
         data-aos="fade-up"
         ref={fadeRef}
-        style={{
-          scale: sectionScale,
-          opacity: sectionOpacity,
-        }}
       >
-        <motion.div 
-          className="text-center mb-6 md:mb-10"
-          variants={layeredContainerVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          <motion.h2 
+        <div className="text-center mb-6 md:mb-10">
+          <h2 
             className="quentin-font text-4xl md:text-5xl lg:text-6xl font-bold text-primary mb-5" 
             data-aos="fade-up" 
             data-aos-delay="0"
-            variants={layeredTextVariants}
           >
             The best thing about Design
-          </motion.h2>
-          <motion.p 
+          </h2>
+          <p 
             className="text-base md:text-xl text-muted-foreground max-w-2xl mx-auto mb-[5.25rem]" 
             data-aos="fade-up" 
             data-aos-delay="90"
-            variants={layeredTextVariants}
           >
             ~is, it's all about the people~
-          </motion.p>
-        </motion.div>
+          </p>
+        </div>
 
-        <motion.div 
-          className="w-full max-w-7xl mx-auto"
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          ref={scaleUpRef}
-        >
-          <motion.div 
+        <div className="w-full max-w-7xl mx-auto" ref={scaleUpRef}>
+          <div 
             data-aos="fade-up" 
             data-aos-delay="210" 
             className={isMobile ? "flex flex-col gap-6 items-center" : "grid grid-cols-[auto_2fr] gap-24 items-start h-96 mx-auto"}
-            variants={itemVariants}
           >
             {/* Carousel Column */}
-            <motion.div
+            <div
               className={isMobile 
                 ? "relative w-[160px] h-[210px] perspective-1000" 
                 : "relative w-[240px] md:w-[300px] h-full perspective-1000 pl-6"
@@ -273,7 +254,6 @@ const Testimonials = () => {
               ref={imageContainerRef}
               style={{ 
                 perspective: '900px',
-                y: floatingY,
               }}
             >
               {testimonials.map((testimonial, index) => (
@@ -308,7 +288,7 @@ const Testimonials = () => {
                   </div>
                 </div>
               ))}
-            </motion.div>
+            </div>
             
             {/* Text Column */}
             <div className={isMobile 
@@ -342,45 +322,14 @@ const Testimonials = () => {
                 className={isMobile ? "mb-4" : "absolute"} 
                 style={!isMobile ? { top: 'calc(50% - 100px)' } : {}}
               >
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={activeIndex}
-                    variants={quoteVariants}
-                    initial="initial"
-                    animate="animate"
-                    exit="exit"
-                    transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                <div>
+                  <p
+                    className="leading-relaxed text-foreground"
+                    style={{ fontSize: isMobile ? '0.95rem' : '1.25rem' }}
                   >
-                    <motion.p
-                      className="leading-relaxed text-foreground"
-                      style={{ fontSize: isMobile ? '0.95rem' : '1.25rem' }}
-                    >
-                      {activeTestimonial.quote.split(" ").map((word, i) => (
-                        <motion.span
-                          key={i}
-                          initial={{
-                            filter: "blur(0.125rem)",
-                            opacity: 0,
-                            y: 5,
-                          }}
-                          animate={{
-                            filter: "blur(0rem)",
-                            opacity: 1,
-                            y: 0,
-                          }}
-                          transition={{
-                            duration: 0.6,
-                            ease: [0.22, 1, 0.36, 1],
-                            delay: 0.025 * i,
-                          }}
-                          style={{ display: "inline-block" }}
-                        >
-                          {word}&nbsp;
-                        </motion.span>
-                      ))}
-                    </motion.p>
-                  </motion.div>
-                </AnimatePresence>
+                    {activeTestimonial.quote}
+                  </p>
+                </div>
               </div>
               
               {/* Navigation Buttons */}
@@ -411,9 +360,9 @@ const Testimonials = () => {
                 </button>
               </div>
             </div>
-          </motion.div>
-        </motion.div>
-      </motion.div>
+          </div>
+        </div>
+      </div>
     </section>
   );
 };

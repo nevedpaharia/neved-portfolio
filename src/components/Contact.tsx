@@ -11,7 +11,7 @@ import { toast } from '@/hooks/use-toast';
 
 // Remove Tawk_API TypeScript declaration and isChatOpen state
 import { useFadeInSection } from '@/hooks/use-fade-in-section';
-import { useScaleUpSection, layeredTextVariants, layeredContainerVariants } from '@/hooks/use-scale-up-section';
+import { useScaleUpSection } from '@/hooks/use-scale-up-section';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -85,25 +85,14 @@ const Contact = () => {
     <section id="contact" className="relative z-10 pt-[16rem] pb-8 md:pb-12">
       <div className="max-w-6xl mx-auto px-4 md:px-8 relative z-10" data-aos="fade-up" ref={fadeRef}>
 
-        <motion.div 
-          className="text-center mb-6 md:mb-10 relative"
-          variants={layeredContainerVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          <motion.h2 
-            className="quentin-font text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-5"
-            variants={layeredTextVariants}
-          >
+        <div className="text-center mb-6 md:mb-10 relative">
+          <h2 className="quentin-font text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-5">
           I wear a lot of watches
-          </motion.h2>
-          <motion.p 
-            className="text-base md:text-xl text-white max-w-2xl mx-auto relative z-10"
-            variants={layeredTextVariants}
-          >
+          </h2>
+          <p className="text-base md:text-xl text-white max-w-2xl mx-auto relative z-10">
           ~but that's just a hobby, here's how we can engage~
-          </motion.p>
-        </motion.div>
+          </p>
+        </div>
 
         <div className="bg-white/20 backdrop-blur-md radius-2xl md:radius-3xl p-4 md:p-6 lg:p-8 border border-white/20 shadow-xl" ref={scaleUpRef}>
           {/* Calendly Button Only, full width, prominent, mobile responsive */}

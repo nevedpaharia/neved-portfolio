@@ -4,7 +4,7 @@ import React from "react";
 import { motion } from 'framer-motion';
 import { Instagram, Mail, ArrowUpRightFromCircle, Heart } from "lucide-react";
 import { useIsMobile } from '@/hooks/use-mobile';
-import { useScaleUpSection, layeredTextVariants, layeredContainerVariants } from '@/hooks/use-scale-up-section';
+import { useScaleUpSection } from '@/hooks/use-scale-up-section';
 
 const Footer = () => {
   const scaleUpRef = useScaleUpSection();
@@ -20,12 +20,9 @@ const Footer = () => {
     <>
       <footer className="relative z-10 pt-6 md:pt-8 pb-8 w-full text-white">
         {/* Top Row */}
-        <motion.div 
+        <div 
           className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 grid grid-cols-3 items-center gap-4 md:gap-6" 
           ref={scaleUpRef}
-          variants={layeredContainerVariants}
-          initial="hidden"
-          animate="visible"
         >
           {/* Left - Need Support */}
           <div className="flex flex-col items-start gap-2 md:gap-3 justify-self-start">
@@ -79,7 +76,7 @@ const Footer = () => {
               </a>
             </div>
           </div>
-        </motion.div>
+        </div>
 
         {/* Divider */}
         <div className="border-t border-white/20 mt-8 mb-8 mx-auto max-w-7xl" />

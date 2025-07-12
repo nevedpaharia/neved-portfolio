@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { useScaleUpSection, scaleUpVariants, scaleUpContainerVariants, layeredTextVariants, layeredContainerVariants } from '@/hooks/use-scale-up-section';
+import { useScaleUpSection } from '@/hooks/use-scale-up-section';
+import { useReducedMotion } from '@/hooks/use-reduced-motion';
 
 const ProjectCard = ({ title, description, link, thumbnail, video, buttonLabel, subtitle }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -12,6 +13,7 @@ const ProjectCard = ({ title, description, link, thumbnail, video, buttonLabel, 
   const hoverTimeout = useRef(null);
   const videoRef = useRef(null);
   const cardRef = useRef(null);
+  const prefersReducedMotion = useReducedMotion();
 
   // Add scroll-based floating animation
   const { scrollYProgress } = useScroll({
@@ -19,7 +21,11 @@ const ProjectCard = ({ title, description, link, thumbnail, video, buttonLabel, 
     offset: ["start end", "end start"]
   });
   
-  const floatingY = useTransform(scrollYProgress, [0, 1], [40, 0]);
+  const floatingY = useTransform(
+    scrollYProgress, 
+    [0, 1], 
+    prefersReducedMotion ? [0, 0] : [40, 0]
+  );
 
   useEffect(() => {
     const observer = new window.IntersectionObserver(
@@ -36,7 +42,7 @@ const ProjectCard = ({ title, description, link, thumbnail, video, buttonLabel, 
   }, []);
 
   useEffect(() => {
-    if (isHovered) {
+    if (isHovered && !prefersReducedMotion) {
       // Set a timeout to load video after hover
       hoverTimeout.current = setTimeout(() => {
         setShouldLoadVideo(true);
@@ -55,7 +61,7 @@ const ProjectCard = ({ title, description, link, thumbnail, video, buttonLabel, 
       return () => clearTimeout(unloadTimeout);
     }
     return () => clearTimeout(hoverTimeout.current);
-  }, [isHovered]);
+  }, [isHovered, prefersReducedMotion]);
 
   const handleVideoLoad = () => {
     setIsVideoReady(true);
@@ -102,42 +108,29 @@ const ProjectCard = ({ title, description, link, thumbnail, video, buttonLabel, 
         }}
         className={`flex items-start gap-6 bg-white/10 border border-white/20 radius-2xl overflow-hidden pl-6 pr-8 py-6 transition-[filter,backdrop-filter,transform] duration-300 ease-in-out ${isInView ? 'backdrop-blur-0' : 'backdrop-blur-lg'}`}
       >
-        <motion.div
+        <div
           className={`radius-xl overflow-hidden flex-shrink-0 transition-shadow duration-300 relative ${isHovered ? 'shadow-xl' : ''}`}
           style={{
-            width: isHovered ? imgHoverWidth : imgInitialWidth,
+            width: isHovered && !prefersReducedMotion ? imgHoverWidth : imgInitialWidth,
             height: imgHoverHeight,
             minWidth: imgInitialWidth,
             minHeight: imgInitialHeight,
-            transition: 'width 0.6s ease-in-out, height 0.6s ease-in-out, filter 0.3s, backdrop-filter 0.3s, transform 0.3s'
+            transition: prefersReducedMotion ? 'none' : 'width 0.6s ease-in-out, height 0.6s ease-in-out, filter 0.3s, backdrop-filter 0.3s, transform 0.3s'
           }}
-          animate={{ scale: 1 }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
         >
           {/* Thumbnail Image */}
-          <motion.div
-            className="absolute inset-0"
-            initial={{ opacity: 1 }}
-            animate={{ opacity: showVideo ? 0 : 1 }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          >
+          <div className="absolute inset-0">
             <img
               src={thumbnail}
               alt={`Project: ${title} - Brand Identity Portfolio by Neved Paharia`}
               className="w-full h-full object-cover bg-black"
               loading="lazy"
             />
-          </motion.div>
+          </div>
 
           {/* Video with lazy loading and proper cleanup */}
           {shouldLoadVideo && (
-            <motion.div
-              className="absolute inset-0"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: isVideoReady ? 1 : 0 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            >
+            <div className="absolute inset-0">
               <video
                 ref={videoRef}
                 src={video}
@@ -149,11 +142,13 @@ const ProjectCard = ({ title, description, link, thumbnail, video, buttonLabel, 
                 onLoadedData={handleVideoLoad}
                 onError={handleVideoError}
                 className="w-full h-full object-cover bg-black"
+                width={imgHoverWidth}
+                height={imgHoverHeight}
               />
-            </motion.div>
+            </div>
           )}
-        </motion.div>
-        <div className="flex-1 text-white transition-transform ease-in-out duration-500 group-hover:translate-x-4">
+        </div>
+        <div className={`flex-1 text-white transition-transform ease-in-out duration-500 ${!prefersReducedMotion ? 'group-hover:translate-x-4' : ''}`}>
           <h3 className="text-2xl md:text-3xl font-bold font-montserrat">
             {title}
           </h3>
@@ -167,7 +162,7 @@ const ProjectCard = ({ title, description, link, thumbnail, video, buttonLabel, 
           </p>
           <div className="mt-4 flex items-center gap-2 text-sm font-bold font-montserrat">
             <span>{buttonLabel || 'View case'}</span>
-            <span className="transform transition-transform duration-300 group-hover:translate-x-2">
+            <span className={`transform transition-transform duration-300 ${!prefersReducedMotion ? 'group-hover:translate-x-2' : ''}`}>
               →
             </span>
           </div>
@@ -178,9 +173,7 @@ const ProjectCard = ({ title, description, link, thumbnail, video, buttonLabel, 
 };
 
 export default function Projects() {
-  // Use the enhanced scale-up variants
-  const containerVariants = scaleUpContainerVariants;
-  const itemVariants = scaleUpVariants;
+  const prefersReducedMotion = useReducedMotion();
 
   // Intersection Observer for fade-up
   const headlineRef = useRef(null);
@@ -223,13 +216,8 @@ export default function Projects() {
       >
         ~but when i get to it, I try making 'em right~
       </p>
-      <motion.div 
-        className="flex flex-col gap-10 w-full"
-        variants={layeredContainerVariants}
-        initial="hidden"
-        animate="visible"
-      >
-        <motion.div data-aos="fade-up" data-aos-delay="200" variants={layeredTextVariants}>
+      <div className="flex flex-col gap-10 w-full">
+        <div data-aos="fade-up" data-aos-delay="200">
           <ProjectCard
             title="EcoWrap | The Freshness Guardian"
             subtitle="Cut waste, stay fresh."
@@ -239,8 +227,8 @@ export default function Projects() {
             video="/project highlights/1.webm"
             buttonLabel="Discover the Process"
           />
-        </motion.div>
-        <motion.div data-aos="fade-up" data-aos-delay="300" variants={layeredTextVariants}>
+        </div>
+        <div data-aos="fade-up" data-aos-delay="300">
           <ProjectCard
             title="Soch | Voices Unheard"
             subtitle="Friendship in face of odds."
@@ -250,8 +238,8 @@ export default function Projects() {
             video="/project highlights/2.webm"
             buttonLabel="Experience the Impact"
           />
-        </motion.div>
-        <motion.div data-aos="fade-up" data-aos-delay="400" variants={layeredTextVariants}>
+        </div>
+        <div data-aos="fade-up" data-aos-delay="400">
           <ProjectCard
             title="Team Mighty | Brand of Champions"
             subtitle="Strength through unified identity."
@@ -261,8 +249,8 @@ export default function Projects() {
             video="/project highlights/3.webm"
             buttonLabel="Unveil the Details"
           />
-        </motion.div>
-      </motion.div>
+        </div>
+      </div>
       <div className="mt-16 flex justify-center">
         <div className="relative group w-fit h-fit transition-transform duration-300 hover:scale-110">
           {/* gray glow ring - same as Let's work together button */}
