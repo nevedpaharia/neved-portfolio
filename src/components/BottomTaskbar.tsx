@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
+import TopProgressBar from './TopProgressBar';
 
 const sections = [
   { name: 'Home', href: '#home' },
@@ -11,24 +12,11 @@ const sections = [
   { name: 'Contact', href: '#contact' },
 ];
 
-const BottomTaskbar = () => {
-  const [showBar, setShowBar] = useState(false);
+const BottomTaskbar = ({ showBar }: { showBar: boolean }) => {
   const isMobile = useIsMobile();
-
-  useEffect(() => {
-    if (isMobile) return;
-    const handleScroll = () => {
-      const hero = document.getElementById('home')?.offsetHeight || 0;
-      setShowBar(window.scrollY > hero - 50);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [isMobile]);
-
   if (isMobile) {
     return null;
   }
-
   return (
     <div
       className={cn(
@@ -37,8 +25,8 @@ const BottomTaskbar = () => {
       )}
     >
       <div
-        className="grid grid-cols-5 items-center justify-center gap-2 px-6 py-2 rounded-2xl border border-black bg-white/60 dark:bg-zinc-800/20 backdrop-blur-md shadow-md"
-        style={{ borderWidth: '0.5px' }}
+        className="grid grid-cols-5 items-center justify-center gap-2 px-6 py-2 radius-2xl border border-black bg-white/60 dark:bg-zinc-800/20 backdrop-blur-md shadow-sm"
+        style={{ borderWidth: '0.03125rem' }}
       >
         {sections.map((section, idx) => (
           <a
@@ -47,9 +35,18 @@ const BottomTaskbar = () => {
             onClick={e => {
               e.preventDefault();
               const id = section.href.replace('#', '');
-              const el = document.getElementById(id);
-              if (el) {
-                el.scrollIntoView({ behavior: 'smooth' });
+              const sectionEl = document.getElementById(id);
+              if (sectionEl) {
+                const heading = sectionEl.querySelector('.quentin-font');
+                if (heading) {
+                  const yOffset = -7 * 16; // 7rem in px
+                  const y = (heading as HTMLElement).getBoundingClientRect().top + window.pageYOffset + yOffset;
+                  window.scrollTo({ top: y, behavior: 'smooth' });
+                } else {
+                  const yOffset = -7 * 16;
+                  const y = sectionEl.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                  window.scrollTo({ top: y, behavior: 'smooth' });
+                }
               }
             }}
             className="text-sm text-gray-800 dark:text-gray-200 font-medium hover:text-black dark:hover:text-white transition text-center"

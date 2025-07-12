@@ -66,19 +66,25 @@ const config = {
           ring: "hsl(var(--sidebar-ring))",
         },
       },
-      animation: {
-        aurora: "aurora 60s linear infinite",
-      },
+
+      // ─── RAINBOW‑GLOW KEYFRAMES + ANIMATION ──────────────────────
       keyframes: {
         aurora: {
-          from: {
-            backgroundPosition: "50% 50%, 50% 50%",
-          },
-          to: {
-            backgroundPosition: "350% 50%, 350% 50%",
-          },
+          from: { backgroundPosition: "50% 50%, 50% 50%" },
+          to:   { backgroundPosition: "350% 50%, 350% 50%" },
+        },
+        glowing: {
+          "0%":   { backgroundPosition: "0% 0%" },
+          "50%":  { backgroundPosition: "400% 0%" },
+          "100%": { backgroundPosition: "0% 0%" },
         },
       },
+      animation: {
+        aurora:  "aurora 60s linear infinite",
+        glowing: "glowing 20s linear infinite",
+      },
+      // ────────────────────────────────────────────────────────────────
+
       fontFamily: {
         sans: ["Montserrat", "sans-serif"],
       },

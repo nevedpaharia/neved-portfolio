@@ -9,22 +9,50 @@ import BottomTaskbar from '@/components/BottomTaskbar';
 import CustomCursor from '@/components/CustomCursor';
 import BackgroundLayers from '@/components/BackgroundLayers';
 import { useIsMobile } from '@/hooks/use-mobile';
+import FadeInSection from '@/components/ui/FadeInSection';
+import TopProgressBar from '@/components/TopProgressBar';
+import { useEffect, useState } from 'react';
 
 const Index = () => {
   const isMobile = useIsMobile();
+  const [showBar, setShowBar] = useState(false);
+  const [scrollPercent, setScrollPercent] = useState(0);
+
+  useEffect(() => {
+    if (isMobile) return;
+    const handleScroll = () => {
+      const hero = document.getElementById('home')?.offsetHeight || 0;
+      setShowBar(window.scrollY > hero - 50);
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const percent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      setScrollPercent(percent);
+    };
+    window.addEventListener('scroll', handleScroll);
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [isMobile]);
+
   return (
     <div id="smooth-scroll-wrapper" className="relative min-h-screen">
+      {!isMobile && <TopProgressBar showBar={showBar} scrollPercent={scrollPercent} />}
       <BackgroundLayers />
       <CustomCursor />
       <Hero />
-      <About />
-      <div className="relative">
+      <FadeInSection>
+        <About />
+      </FadeInSection>
+      <FadeInSection>
         <Projects />
+      </FadeInSection>
+      <FadeInSection>
         <Testimonials />
-      </div>
-      <Contact />
+      </FadeInSection>
+      <FadeInSection>
+        <Contact />
+      </FadeInSection>
       <Footer />
-      {!isMobile && <BottomTaskbar />}
+      {!isMobile && <BottomTaskbar showBar={showBar} />}
     </div>
   );
 };

@@ -6,8 +6,9 @@ import React, {
   useCallback,
 } from 'react';
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { useFadeInSection } from '@/hooks/use-fade-in-section';
+import { useScaleUpSection, scaleUpVariants, scaleUpContainerVariants, layeredTextVariants, layeredContainerVariants } from '@/hooks/use-scale-up-section';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 const Testimonials = () => {
@@ -34,6 +35,24 @@ const Testimonials = () => {
   ];
 
   const fadeRef = useFadeInSection();
+  const scaleUpRef = useScaleUpSection();
+
+  // Add scroll-based floating animation for testimonial images
+  const { scrollYProgress } = useScroll({
+    target: fadeRef,
+    offset: ["start end", "end start"]
+  });
+  
+  const floatingY = useTransform(scrollYProgress, [0, 1], [0, -20]);
+
+  // Add scroll-based reveal animation for the entire section
+  const { scrollYProgress: sectionScrollYProgress } = useScroll({
+    target: fadeRef,
+    offset: ["start end", "center center"]
+  });
+  
+  const sectionScale = useTransform(sectionScrollYProgress, [0, 1], [0.98, 1]);
+  const sectionOpacity = useTransform(sectionScrollYProgress, [0, 1], [0.8, 1]);
 
   // Circular Testimonials Component Logic
   function calculateGap(width: number) {
@@ -47,22 +66,13 @@ const Testimonials = () => {
     return minGap + (maxGap - minGap) * ((width - minWidth) / (maxWidth - minWidth));
   }
 
-  // Color & font config
-  const colorName = "#031636";
-  const colorDesignation = "#6b7280";
-  const colorTestimony = "#4b5563";
-  const colorArrowBg = "#031636";
-  const colorArrowFg = "#ffffff";
-  const colorArrowHoverBg = "#ccb533";
-  const fontSizeName = "1.75rem";
-  const fontSizeDesignation = "1rem";
-  const fontSizeQuote = "1.25rem";
-
   // State
   const [activeIndex, setActiveIndex] = useState(0);
   const [hoverPrev, setHoverPrev] = useState(false);
   const [hoverNext, setHoverNext] = useState(false);
   const [containerWidth, setContainerWidth] = useState(1200);
+  const [inViewArr, setInViewArr] = useState([]);
+  const cardRefs = useRef([]);
 
   const imageContainerRef = useRef<HTMLDivElement>(null);
   const autoplayIntervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -110,6 +120,7 @@ const Testimonials = () => {
     setActiveIndex((prev) => (prev + 1) % testimonialsLength);
     if (autoplayIntervalRef.current) clearInterval(autoplayIntervalRef.current);
   }, [testimonialsLength]);
+  
   const handlePrev = useCallback(() => {
     setActiveIndex((prev) => (prev - 1 + testimonialsLength) % testimonialsLength);
     if (autoplayIntervalRef.current) clearInterval(autoplayIntervalRef.current);
@@ -117,11 +128,12 @@ const Testimonials = () => {
 
   // Compute transforms for each image (always show 3: left, center, right)
   function getImageStyle(index: number): React.CSSProperties {
-    const gap = calculateGap(containerWidth) * 0.7; // moderate pop
+    const gap = calculateGap(containerWidth) * 0.7;
     const maxStickUp = gap * 0.18;
     const isActive = index === activeIndex;
     const isLeft = (activeIndex - 1 + testimonialsLength) % testimonialsLength === index;
     const isRight = (activeIndex + 1) % testimonialsLength === index;
+    
     if (isActive) {
       return {
         zIndex: 3,
@@ -130,7 +142,7 @@ const Testimonials = () => {
         filter: "none",
         transform: `translateX(0px) translateY(0px) scale(1) rotateY(0deg)`,
         boxShadow: "0 4px 32px 0 rgba(0,0,0,0.18)",
-        transition: "all 0.7s cubic-bezier(.4,2,.3,1)",
+        transition: "all 0.7s cubic-bezier(0.22, 1, 0.36, 1)",
         transformStyle: 'preserve-3d',
       };
     }
@@ -139,10 +151,10 @@ const Testimonials = () => {
         zIndex: 2,
         opacity: 0.85,
         pointerEvents: "auto",
-        filter: "blur(0.4px)",
+        filter: "blur(0.125rem)",
         transform: `translateX(-${gap * 0.6}px) translateY(-${maxStickUp * 1.5}px) scale(0.96) rotateY(10deg)`,
         boxShadow: "-8px 8px 24px rgba(0,0,0,0.10)",
-        transition: "all 0.7s cubic-bezier(.4,2,.3,1)",
+        transition: "all 0.7s cubic-bezier(0.22, 1, 0.36, 1)",
         transformStyle: 'preserve-3d',
       };
     }
@@ -151,23 +163,26 @@ const Testimonials = () => {
         zIndex: 2,
         opacity: 0.85,
         pointerEvents: "auto",
-        filter: "blur(0.4px)",
+        filter: "blur(0.125rem)",
         transform: `translateX(${gap * 0.6}px) translateY(-${maxStickUp * 1.5}px) scale(0.96) rotateY(-10deg)`,
         boxShadow: "8px 8px 24px rgba(0,0,0,0.10)",
-        transition: "all 0.7s cubic-bezier(.4,2,.3,1)",
+        transition: "all 0.7s cubic-bezier(0.22, 1, 0.36, 1)",
         transformStyle: 'preserve-3d',
       };
     }
-    // Hide all other images
     return {
       zIndex: 1,
       opacity: 0,
       pointerEvents: "none",
       filter: "none",
-      transition: "all 0.7s cubic-bezier(.4,2,.3,1)",
+      transition: "all 0.7s cubic-bezier(0.22, 1, 0.36, 1)",
       transformStyle: 'preserve-3d',
     };
   }
+
+  // Use the enhanced scale-up variants
+  const containerVariants = scaleUpContainerVariants;
+  const itemVariants = scaleUpVariants;
 
   // Framer Motion variants for quote
   const quoteVariants = {
@@ -176,178 +191,230 @@ const Testimonials = () => {
     exit: { opacity: 0, y: -20 },
   };
 
+  useEffect(() => {
+    cardRefs.current = cardRefs.current.slice(0, testimonials.length);
+    const observer = new window.IntersectionObserver((entries) => {
+      setInViewArr((prev) => {
+        const newArr = [...prev];
+        entries.forEach((entry, idx) => {
+          if (entry.isIntersecting) newArr[idx] = true;
+        });
+        return newArr;
+      });
+    }, { threshold: 0.2 });
+    cardRefs.current.forEach(ref => ref && observer.observe(ref));
+    return () => observer.disconnect();
+  }, [testimonials.length]);
+
   return (
     <section
       id="testimonials"
-      className="py-72 md:py-[400px] relative overflow-hidden flex items-center min-h-screen"
+      className="py-[28rem] relative overflow-hidden flex items-center min-h-screen"
     >
       <img
-        src="/background/paper 3.png"
+        src="/background/paper 3.webp"
         alt="Torn Paper Background"
-        className="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none select-none"
+        className="absolute inset-0 w-full h-full object-cover object-center z-0 pointer-events-none select-none"
         draggable={false}
         aria-hidden="true"
       />
-      <div
+      <motion.div
         className="max-w-6xl mx-auto px-4 md:px-8 pb-4 md:pb-8 relative z-10"
         data-aos="fade-up"
         ref={fadeRef}
+        style={{
+          scale: sectionScale,
+          opacity: sectionOpacity,
+        }}
       >
-        <div className="text-center mb-6 md:mb-10">
-          <h2 className="quentin-font text-4xl md:text-5xl lg:text-6xl font-bold text-primary mb-5" data-aos="fade-up" data-aos-delay="0">
-            The best  thing about Design
-          </h2>
-          <p className="text-base md:text-xl text-muted-foreground max-w-2xl mx-auto mb-[84px]" data-aos="fade-up" data-aos-delay="90">
+        <motion.div 
+          className="text-center mb-6 md:mb-10"
+          variants={layeredContainerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          <motion.h2 
+            className="quentin-font text-4xl md:text-5xl lg:text-6xl font-bold text-primary mb-5" 
+            data-aos="fade-up" 
+            data-aos-delay="0"
+            variants={layeredTextVariants}
+          >
+            The best thing about Design
+          </motion.h2>
+          <motion.p 
+            className="text-base md:text-xl text-muted-foreground max-w-2xl mx-auto mb-[5.25rem]" 
+            data-aos="fade-up" 
+            data-aos-delay="90"
+            variants={layeredTextVariants}
+          >
             ~is, it's all about the people~
-          </p>
-        </div>
+          </motion.p>
+        </motion.div>
 
-        <div className="w-full max-w-7xl mx-auto">
-          <div data-aos="fade-up" data-aos-delay="210" className={isMobile ? "flex flex-col gap-6 items-center" : "grid grid-cols-[auto_2fr] gap-24 items-start h-96 mx-auto"}>
-              {/* Carousel Column */}
-              <div
-                className={isMobile 
-                  ? "relative w-[160px] h-[210px] perspective-1000" 
-                  : "relative w-[240px] md:w-[300px] h-full perspective-1000 pl-6"
-                }
-                ref={imageContainerRef}
-                style={{ perspective: '900px' }}
-              >
-                {testimonials.map((testimonial, index) => (
+        <motion.div 
+          className="w-full max-w-7xl mx-auto"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          ref={scaleUpRef}
+        >
+          <motion.div 
+            data-aos="fade-up" 
+            data-aos-delay="210" 
+            className={isMobile ? "flex flex-col gap-6 items-center" : "grid grid-cols-[auto_2fr] gap-24 items-start h-96 mx-auto"}
+            variants={itemVariants}
+          >
+            {/* Carousel Column */}
+            <motion.div
+              className={isMobile 
+                ? "relative w-[160px] h-[210px] perspective-1000" 
+                : "relative w-[240px] md:w-[300px] h-full perspective-1000 pl-6"
+              }
+              ref={imageContainerRef}
+              style={{ 
+                perspective: '900px',
+                y: floatingY,
+              }}
+            >
+              {testimonials.map((testimonial, index) => (
+                <div
+                  key={testimonial.src}
+                  className="absolute left-0 top-0 w-full aspect-[3/4] overflow-hidden"
+                  style={{ ...getImageStyle(index), transformStyle: 'preserve-3d' }}
+                >
                   <div
-                    key={testimonial.src}
-                    className="absolute left-0 top-0 w-full aspect-[3/4] overflow-hidden"
-                    style={{ ...getImageStyle(index), transformStyle: 'preserve-3d' }}
+                    ref={el => cardRefs.current[index] = el}
+                    className={`group relative w-full h-full radius-lg md:radius-xl bg-white/10 border border-white/20 shadow-lg transition-[filter,backdrop-filter,transform] duration-300 ease-in-out flex flex-col overflow-hidden ${inViewArr[index] ? 'backdrop-blur-0' : 'backdrop-blur-sm'}`}
                   >
-                    <div className="group relative w-full h-full rounded-lg md:rounded-xl bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg transition-all duration-300 ease-in-out flex flex-col overflow-hidden">
-                      <img 
-                        src={testimonial.src} 
-                        alt={testimonial.name}
-                        className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
-                        loading="lazy"
-                        onError={(e) => {
-                          console.log(`Testimonial image failed to load: ${testimonial.src}`);
-                          e.currentTarget.style.display = 'none';
-                          const parent = e.currentTarget.parentElement;
-                          if (parent) {
-                            parent.innerHTML = `<div class="w-full h-full bg-gradient-to-br from-primary/20 to-secondary/20 flex flex-col items-center justify-center text-primary">
-                              <div class="text-xl md:text-2xl font-bold mb-2">${testimonial.name.split(' ').map(n => n[0]).join('')}</div>
-                              <div class="text-xs md:text-sm text-center px-4">${testimonial.name}</div>
-                            </div>`;
-                          }
-                        }}
-                      />
-                    </div>
+                    <img 
+                      src={testimonial.src} 
+                      alt={testimonial.name}
+                      className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                      loading="lazy"
+                      onError={(e) => {
+                        console.log(`Testimonial image failed to load: ${testimonial.src}`);
+                        e.currentTarget.style.display = 'none';
+                        const parent = e.currentTarget.parentElement;
+                        if (parent) {
+                          const initials = testimonial.name.split(' ').map(n => n[0]).join('');
+                          const fallbackHTML = '<div class="w-full h-full bg-gradient-to-br from-primary/20 to-secondary/20 flex flex-col items-center justify-center text-primary">' +
+                            '<div class="text-xl md:text-2xl font-bold mb-2">' + initials + '</div>' +
+                            '<div class="text-xs md:text-sm text-center px-4">' + testimonial.name + '</div>' +
+                            '</div>';
+                          parent.innerHTML = fallbackHTML;
+                        }
+                      }}
+                    />
                   </div>
-                ))}
+                </div>
+              ))}
+            </motion.div>
+            
+            {/* Text Column */}
+            <div className={isMobile 
+              ? "relative flex flex-col justify-center text-center px-2 min-h-[280px]" 
+              : "relative flex flex-col justify-center h-full w-[120%] text-left pb-20 pr-12"
+            }>
+              {/* Fixed Name and Role Section */}
+              <div 
+                className={isMobile 
+                  ? "mb-3" 
+                  : "absolute top-1/2 transform -translate-y-1/2"
+                } 
+                style={!isMobile ? { top: 'calc(50% - 135px)' } : {}}
+              >
+                <h3
+                  className="font-bold mb-1 text-primary"
+                  style={{ fontSize: isMobile ? '1.25rem' : '1.75rem' }}
+                >
+                  {activeTestimonial.name}
+                </h3>
+                <p
+                  className="mb-2 text-muted-foreground"
+                  style={{ fontSize: isMobile ? '0.875rem' : '1rem', marginTop: '-4px' }}
+                >
+                  {activeTestimonial.designation}
+                </p>
               </div>
-              {/* Text Column */}
-              <div className={isMobile 
-                ? "relative flex flex-col justify-center text-center px-2 min-h-[280px]" 
-                : "relative flex flex-col justify-center h-full w-[120%] text-left pb-20 pr-12"
-              }>
-                {/* Fixed Name and Role Section */}
-                <div 
-                  className={isMobile 
-                    ? "mb-3" 
-                    : "absolute top-1/2 transform -translate-y-1/2"
-                  } 
-                  style={!isMobile ? { top: 'calc(50% - 135px)' } : {}}
-                >
-                  <h3
-                    className="font-bold mb-1 text-primary"
-                    style={{ fontSize: isMobile ? '1.25rem' : '1.75rem' }}
+              
+              {/* Fixed Message Start Position */}
+              <div 
+                className={isMobile ? "mb-4" : "absolute"} 
+                style={!isMobile ? { top: 'calc(50% - 100px)' } : {}}
+              >
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={activeIndex}
+                    variants={quoteVariants}
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
+                    transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
                   >
-                    {activeTestimonial.name}
-                  </h3>
-                  <p
-                    className="mb-2 text-muted-foreground"
-                    style={{ fontSize: isMobile ? '0.875rem' : '1rem', marginTop: '-4px' }}
-                  >
-                    {activeTestimonial.designation}
-                  </p>
-                </div>
-                
-                {/* Fixed Message Start Position */}
-                <div 
-                  className={isMobile ? "mb-4" : "absolute"} 
-                  style={!isMobile ? { top: 'calc(50% - 100px)' } : {}}
-                >
-                  <AnimatePresence mode="wait">
-                    <motion.div
-                      key={activeIndex}
-                      variants={quoteVariants}
-                      initial="initial"
-                      animate="animate"
-                      exit="exit"
-                      transition={{ duration: 0.3, ease: "easeInOut" }}
+                    <motion.p
+                      className="leading-relaxed text-foreground"
+                      style={{ fontSize: isMobile ? '0.95rem' : '1.25rem' }}
                     >
-                      <motion.p
-                        className="leading-relaxed text-foreground"
-                        style={{ fontSize: isMobile ? '0.95rem' : '1.25rem' }}
-                      >
-                        {activeTestimonial.quote.split(" ").map((word, i) => (
-                          <motion.span
-                            key={i}
-                            initial={{
-                              filter: "blur(10px)",
-                              opacity: 0,
-                              y: 5,
-                            }}
-                            animate={{
-                              filter: "blur(0px)",
-                              opacity: 1,
-                              y: 0,
-                            }}
-                            transition={{
-                              duration: 0.22,
-                              ease: "easeInOut",
-                              delay: 0.025 * i,
-                            }}
-                            style={{ display: "inline-block" }}
-                          >
-                            {word}&nbsp;
-                          </motion.span>
-                        ))}
-                      </motion.p>
-                    </motion.div>
-                  </AnimatePresence>
-                </div>
-                <div 
-                  className={isMobile 
-                    ? "flex gap-3 justify-center" 
-                    : "flex gap-6 absolute left-0"
-                  } 
-                  style={!isMobile ? { bottom: '28px' } : {}}
+                      {activeTestimonial.quote.split(" ").map((word, i) => (
+                        <motion.span
+                          key={i}
+                          initial={{
+                            filter: "blur(0.125rem)",
+                            opacity: 0,
+                            y: 5,
+                          }}
+                          animate={{
+                            filter: "blur(0rem)",
+                            opacity: 1,
+                            y: 0,
+                          }}
+                          transition={{
+                            duration: 0.6,
+                            ease: [0.22, 1, 0.36, 1],
+                            delay: 0.025 * i,
+                          }}
+                          style={{ display: "inline-block" }}
+                        >
+                          {word}&nbsp;
+                        </motion.span>
+                      ))}
+                    </motion.p>
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+              
+              {/* Navigation Buttons */}
+              <div 
+                className={isMobile 
+                  ? "flex gap-3 justify-center" 
+                  : "flex gap-6 absolute left-0"
+                } 
+                style={!isMobile ? { bottom: '28px' } : {}}
+              >
+                <button
+                  className={`${isMobile ? 'w-9 h-9' : 'w-11 h-11'} radius-full flex items-center justify-center cursor-pointer transition-all duration-300 border-none bg-primary hover:bg-secondary`}
+                  onClick={handlePrev}
+                  onMouseEnter={() => setHoverPrev(true)}
+                  onMouseLeave={() => setHoverPrev(false)}
+                  aria-label="Previous testimonial"
                 >
-                  <button
-                    className={`${isMobile ? 'w-9 h-9' : 'w-11 h-11'} rounded-full flex items-center justify-center cursor-pointer transition-all duration-300 border-none bg-primary hover:bg-secondary`}
-                    onClick={handlePrev}
-                    onMouseEnter={() => setHoverPrev(true)}
-                    onMouseLeave={() => setHoverPrev(false)}
-                    aria-label="Previous testimonial"
-                  >
-                    <FaArrowLeft size={isMobile ? 20 : 28} className="text-primary-foreground" />
-                  </button>
-                  <button
-                    className={`${isMobile ? 'w-9 h-9' : 'w-11 h-11'} rounded-full flex items-center justify-center cursor-pointer transition-all duration-300 border-none bg-primary hover:bg-secondary`}
-                    onClick={handleNext}
-                    onMouseEnter={() => setHoverNext(true)}
-                    onMouseLeave={() => setHoverNext(false)}
-                    aria-label="Next testimonial"
-                  >
-                    <FaArrowRight size={isMobile ? 20 : 28} className="text-primary-foreground" />
-                  </button>
-                </div>
+                  <FaArrowLeft size={isMobile ? 20 : 28} className="text-primary-foreground" />
+                </button>
+                <button
+                  className={`${isMobile ? 'w-9 h-9' : 'w-11 h-11'} radius-full flex items-center justify-center cursor-pointer transition-all duration-300 border-none bg-primary hover:bg-secondary`}
+                  onClick={handleNext}
+                  onMouseEnter={() => setHoverNext(true)}
+                  onMouseLeave={() => setHoverNext(false)}
+                  aria-label="Next testimonial"
+                >
+                  <FaArrowRight size={isMobile ? 20 : 28} className="text-primary-foreground" />
+                </button>
               </div>
             </div>
-          </div>
-        </div>
-        {/* Bottom Button AOS */}
-        <div data-aos="fade-up" data-aos-delay="330" className="flex justify-center mt-12">
-          {/* Place your button here, or wrap the existing button in this div if already present */}
-        </div>
-      </section>
+          </motion.div>
+        </motion.div>
+      </motion.div>
+    </section>
   );
 };
 

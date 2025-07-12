@@ -17,6 +17,7 @@ const BackgroundLayers: React.FC = () => (
     <img
       src="/background/background.webp"
       alt="Background"
+      loading="lazy"
       style={{
         position: 'absolute',
         inset: 0,

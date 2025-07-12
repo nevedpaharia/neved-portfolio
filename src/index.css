@@ -1,3 +1,5 @@
+@import './styles/design-tokens.css';
+@import './styles/text-colors.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -101,7 +103,7 @@ All colors MUST be HSL.
 @keyframes fade-in {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(1.25rem);
   }
   to {
     opacity: 1;
@@ -112,7 +114,7 @@ All colors MUST be HSL.
 @keyframes fade-up {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(1.875rem);
   }
   to {
     opacity: 1;
@@ -132,11 +134,11 @@ All colors MUST be HSL.
 }
 
 .animate-fade-in {
-  animation: fade-in 0.8s ease-out;
+  animation: fade-in 1s ease-out;
 }
 
 .animate-fade-up {
-  animation: fade-up 0.8s ease-out forwards;
+  animation: fade-up 1s ease-out forwards;
   opacity: 0;
 }
 
@@ -166,12 +168,24 @@ html, body {
 .fade-in-section {
   opacity: 1;
   transform: none;
-  transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1), transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .fade-in-section-init {
   opacity: 0;
-  transform: translateY(32px);
+  transform: translateY(2rem);
+}
+
+/* Scale-up section animations */
+.scale-up-section-init {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+.scale-up-section {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @keyframes brush-reveal {
@@ -181,7 +195,7 @@ html, body {
 
 .brush-animate {
   transform-origin: left;
-  animation: brush-reveal 0.8s ease-out forwards;
+  animation: brush-reveal 1s ease-out forwards;
 }
 
 /* Hero Animation Styles */
@@ -211,15 +225,15 @@ html, body {
 @keyframes float {
   0% {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(0.625rem);
   }
   50% {
     opacity: 0.8;
-    transform: translateY(-5px);
+    transform: translateY(-0.3125rem);
   }
   100% {
     opacity: 0.3;
-    transform: translateY(0px);
+    transform: translateY(0rem);
   }
 }
 
@@ -252,78 +266,8 @@ html, body {
   animation-direction: alternate-reverse;
 }
 
-/* Rocket Animation Styles */
-@keyframes launch {
-  0% {
-    transform: translate(0, 0) rotate(0deg);
-    opacity: 1;
-  }
-  20% {
-    transform: translate(-5px, -8px) rotate(-5deg);
-    opacity: 1;
-  }
-  40% {
-    transform: translate(-8px, -12px) rotate(-8deg);
-    opacity: 1;
-  }
-  60% {
-    transform: translate(-10px, -8px) rotate(-5deg);
-    opacity: 1;
-  }
-  80% {
-    transform: translate(-12px, -10px) rotate(-6deg);
-    opacity: 1;
-  }
-  100% {
-    transform: translate(-15px, -12px) rotate(-7deg);
-    opacity: 1;
-  }
-}
-
-@keyframes flame {
-  0% {
-    opacity: 0;
-    transform: scaleY(0.5);
-  }
-  25% {
-    opacity: 0.8;
-    transform: scaleY(1.2);
-  }
-  50% {
-    opacity: 0.9;
-    transform: scaleY(0.8);
-  }
-  75% {
-    opacity: 0.7;
-    transform: scaleY(1.1);
-  }
-  100% {
-    opacity: 0.6;
-    transform: scaleY(0.9);
-  }
-}
-
-.animate-launch {
-  animation: launch 2s ease-out forwards;
-}
-
-.animate-flame {
-  animation: flame 1.5s ease-in-out infinite alternate;
-}
-
-/* Stagger flame animations for more realistic effect */
-.flame:nth-child(2) {
-  animation-duration: 1.8s;
-}
-
-.flame:nth-child(3) {
-  animation-duration: 1.3s;
-}
-
-.flame:nth-child(4) {
-  animation-duration: 2s;
-}
-
-.flame:nth-child(5) {
-  animation-duration: 1.6s;
+/* Custom selection color for brand */
+::selection {
+  background: hsl(var(--secondary));
+  color: #14213d;
 }

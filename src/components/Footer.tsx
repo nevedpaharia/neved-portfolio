@@ -1,10 +1,14 @@
 
 "use client";
 import React from "react";
+import { motion } from 'framer-motion';
 import { Instagram, Mail, ArrowUpRightFromCircle, Heart } from "lucide-react";
 import { useIsMobile } from '@/hooks/use-mobile';
+import { useScaleUpSection, layeredTextVariants, layeredContainerVariants } from '@/hooks/use-scale-up-section';
 
 const Footer = () => {
+  const scaleUpRef = useScaleUpSection();
+  
   const scrollToTop = () => {
     const heroSection = document.getElementById("home");
     if (heroSection) {
@@ -16,7 +20,13 @@ const Footer = () => {
     <>
       <footer className="relative z-10 pt-6 md:pt-8 pb-8 w-full text-white">
         {/* Top Row */}
-        <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 grid grid-cols-3 items-center gap-4 md:gap-6">
+        <motion.div 
+          className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 grid grid-cols-3 items-center gap-4 md:gap-6" 
+          ref={scaleUpRef}
+          variants={layeredContainerVariants}
+          initial="hidden"
+          animate="visible"
+        >
           {/* Left - Need Support */}
           <div className="flex flex-col items-start gap-2 md:gap-3 justify-self-start">
             <span className="uppercase text-xs tracking-wider font-medium text-white">
@@ -24,7 +34,7 @@ const Footer = () => {
             </span>
             <a
               href="mailto:nevedpaharia@gmail.com"
-              className="p-2 bg-white/20 rounded-full hover:bg-[#ccb533] hover:scale-110 transition-all duration-300"
+              className="p-2 bg-white/20 radius-full hover:bg-[#ccb533] hover:scale-110 transition-all duration-300"
               aria-label="Email"
             >
               <Mail className="w-4 h-4 md:w-5 md:h-5 text-white" />
@@ -37,6 +47,7 @@ const Footer = () => {
               src="/logo.png"
               alt="Neved Logo"
               className="w-20 md:w-28 h-auto object-contain"
+              loading="lazy"
             />
           </div>
 
@@ -48,7 +59,7 @@ const Footer = () => {
             <div className="flex gap-2 md:gap-3">
               <a
                 href="https://instagram.com/nevedpaharia"
-                className="p-2 bg-white/20 rounded-full hover:bg-[#ccb533] hover:scale-110 transition-all duration-300"
+                className="p-2 bg-white/20 radius-full hover:bg-[#ccb533] hover:scale-110 transition-all duration-300"
                 aria-label="Instagram"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -57,7 +68,7 @@ const Footer = () => {
               </a>
               <a
                 href="https://behance.net/nevedpaharia"
-                className="p-2 bg-white/20 rounded-full hover:bg-[#ccb533] hover:scale-110 transition-all duration-300"
+                className="p-2 bg-white/20 radius-full hover:bg-[#ccb533] hover:scale-110 transition-all duration-300"
                 aria-label="Behance"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -68,7 +79,7 @@ const Footer = () => {
               </a>
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Divider */}
         <div className="border-t border-white/20 mt-8 mb-8 mx-auto max-w-7xl" />
@@ -98,7 +109,7 @@ const Footer = () => {
           left: 0,
           right: 0,
           bottom: 0,
-          height: '360px',
+          height: '22.5rem',
           zIndex: 0,
           background: 'linear-gradient(to top, rgba(0,0,0,0.85), rgba(0,0,0,0))',
         }}

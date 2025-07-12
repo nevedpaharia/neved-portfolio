@@ -1,41 +1,5 @@
 /* MouseFollower CSS import removed */
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
-}
-
 @font-face {
   font-family: 'Quentin';
   src: url('/Quentin.woff2') format('woff2'),
@@ -47,66 +11,4 @@
 
 .quentin-font {
   font-family: 'Quentin', serif;
-}
-
-/* Animation keyframes */
-@keyframes fade-up {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.animate-fade-up {
-  animation: fade-up 0.6s ease-out forwards;
-}
-
-.animation-delay-200 {
-  animation-delay: 0.2s;
-}
-
-.animation-delay-400 {
-  animation-delay: 0.4s;
-}
-
-.animation-delay-600 {
-  animation-delay: 0.6s;
-}
-
-/* Fade in section styles */
-.fade-in-section-init {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-}
-@keyframes blackGlow {
-  0% {
-    box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.4);
-  }
-  50% {
-    box-shadow: 0 0 4px 2px rgba(0, 0, 0, 0.6);
-  }
-  100% {
-    box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.4);
-  }
-}
-
-.black-glow-ring {
-  position: absolute;
-  inset: 0;
-  border-radius: 9999px;
-  animation: blackGlow 4s ease-in-out infinite;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.project-card .project-thumb {
-  transform: scale(1.08);
-}
-.project-card:hover .project-thumb {
-  transform: scale(1);
 }
