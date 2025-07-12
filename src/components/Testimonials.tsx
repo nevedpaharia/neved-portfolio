@@ -8,11 +8,14 @@ import React, {
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { useFadeInSection } from '@/hooks/use-fade-in-section';
+import { useReducedMotion } from '@/hooks/use-reduced-motion';
+import OptimizedImage from '@/components/ui/optimized-image';
 import { useScaleUpSection, scaleUpVariants, scaleUpContainerVariants, layeredTextVariants, layeredContainerVariants } from '@/hooks/use-scale-up-section';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 const Testimonials = () => {
   const isMobile = useIsMobile();
+  const prefersReducedMotion = useReducedMotion();
   const testimonials = [
     {
       quote: "Neved designed our logo, business cards, and templates brilliantly. He was proactive, creative, and delivered on time with great dedication. We highly recommend him for professional, high-quality branding work.",
@@ -286,9 +289,11 @@ const Testimonials = () => {
                     ref={el => cardRefs.current[index] = el}
                     className={`group relative w-full h-full radius-lg md:radius-xl bg-white/10 border border-white/20 shadow-lg transition-[filter,backdrop-filter,transform] duration-300 ease-in-out flex flex-col overflow-hidden ${inViewArr[index] ? 'backdrop-blur-0' : 'backdrop-blur-sm'}`}
                   >
-                    <img 
+                    <OptimizedImage 
                       src={testimonial.src} 
                       alt={testimonial.name}
+                      width={300}
+                      height={400}
                       className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
                       loading="lazy"
                       onError={(e) => {

@@ -271,3 +271,29 @@ html, body {
   background: hsl(var(--secondary));
   color: #14213d;
 }
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .animate-fade-in,
+  .animate-fade-up,
+  .animate-pulse-slow,
+  .animate-morph,
+  .animate-float,
+  .brush-animate {
+    animation: none !important;
+  }
+  
+  .fade-in-section,
+  .scale-up-section {
+    transition: none !important;
+  }
+}

@@ -14,7 +14,9 @@
     "type-check": "tsc --noEmit",
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,md}\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json,css,md}\"",
-    "sitemap": "node scripts/generate-sitemap.js"
+    "sitemap": "node scripts/generate-sitemap.js",
+    "optimize-images": "node scripts/optimize-images.js",
+    "performance-check": "node scripts/performance-check.js"
   },
   "dependencies": {
     "@radix-ui/react-checkbox": "^1.1.1",

@@ -5,6 +5,8 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { useReducedMotion } from '@/hooks/use-reduced-motion';
+import OptimizedImage from '@/components/ui/optimized-image';
 import {
   useScaleUpSection,
   scaleUpVariants,
@@ -20,9 +22,10 @@ const Hero: React.FC = () => {
   const [animationStep, setAnimationStep] = useState(0);
   const [typewriterText, setTypewriterText] = useState('');
   const isMobile = useIsMobile();
+  const prefersReducedMotion = useReducedMotion();
   const scaleUpRef = useScaleUpSection();
 
-  // Add scroll-based floating animation for the brush underline
+  // Add scroll-based floating animation for the brush underline (only if motion is not reduced)
   const { scrollYProgress } = useScroll({
     offset: ['start end', 'end start'],
   });
@@ -31,6 +34,12 @@ const Hero: React.FC = () => {
   const fullText = 'Recommended by my Mother';
 
   useEffect(() => {
+    if (prefersReducedMotion) {
+      // Skip animations if user prefers reduced motion
+      setAnimationStep(6);
+      return;
+    }
+    
     const timer1 = setTimeout(() => setAnimationStep(1), 300);
     const timer2 = setTimeout(() => setAnimationStep(2), 800);
     const timer3 = setTimeout(() => setAnimationStep(3), 1300);
@@ -45,10 +54,16 @@ const Hero: React.FC = () => {
       clearTimeout(timer5);
       clearTimeout(timer6);
     };
-  }, []);
+  }, [prefersReducedMotion]);
 
   useEffect(() => {
     if (animationStep >= 6) {
+      if (prefersReducedMotion) {
+        // Show full text immediately if reduced motion is preferred
+        setTypewriterText(fullText);
+        return;
+      }
+      
       const delay = setTimeout(() => {
         let i = 0;
         const typewriterTimer = setInterval(() => {
@@ -62,7 +77,7 @@ const Hero: React.FC = () => {
       }, 800);
       return () => clearTimeout(delay);
     }
-  }, [animationStep, fullText]);
+  }, [animationStep, fullText, prefersReducedMotion]);
 
   const scrollToSection = (id: string): void => {
     const section = document.getElementById(id);
@@ -91,12 +106,14 @@ const Hero: React.FC = () => {
           <>
             <div className="flex justify-between items-center">
               <button onClick={() => scrollToSection('home')} className="focus:outline-none focus-visible:ring-2 focus-visible:ring-accent">
-                <img
+                <OptimizedImage
                   src="/logo.png"
                   alt="Logo"
                   width={86}
                   height={34}
                   className="object-contain"
+                  loading="eager"
+                  fetchpriority="high"
                   onError={(e) => {
                     e.currentTarget.style.display = 'none';
                     e.currentTarget.parentElement!.innerHTML =
@@ -139,12 +156,14 @@ const Hero: React.FC = () => {
               </button>
             ))}
             <button onClick={() => scrollToSection('home')} className="focus:outline-none focus-visible:ring-2 focus-visible:ring-accent">
-              <img
+              <OptimizedImage
                 src="/logo.png"
                 alt="Logo"
                 width={108}
                 height={43}
                 className="object-contain mx-auto"
+                loading="eager"
+                fetchpriority="high"
                 onError={(e) => {
                   e.currentTarget.style.display = 'none';
                   e.currentTarget.parentElement!.innerHTML =
@@ -169,16 +188,16 @@ const Hero: React.FC = () => {
       <div className="relative flex flex-col items-center justify-center text-white text-center px-4 pt-[10vh] min-h-[100vh]">
         <motion.div
           className="relative z-10 max-w-4xl w-full"
-          variants={scaleUpContainerVariants}
-          initial="hidden"
-          animate="visible"
+          variants={prefersReducedMotion ? {} : scaleUpContainerVariants}
+          initial={prefersReducedMotion ? false : "hidden"}
+          animate={prefersReducedMotion ? false : "visible"}
           ref={scaleUpRef}
         >
           {/* Startup Daydreamer */}
           <motion.div
             className="flex justify-center items-center gap-2 text-white font-light mx-auto text-center"
             style={{ fontSize: '0.9rem', marginBottom: '-0.25rem' }}
-            variants={layeredTextVariants}
+            variants={prefersReducedMotion ? {} : layeredTextVariants}
           >
             <span className="text-lg">🚀</span>
             <span>Hey, Startup Daydreamer</span>
@@ -188,33 +207,39 @@ const Hero: React.FC = () => {
           <motion.h1
             className="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight mx-auto"
             style={{ lineHeight: 1.35, marginBottom: '-0.25rem' }}
-            variants={layeredTextVariants}
+            variants={prefersReducedMotion ? {} : layeredTextVariants}
           >
             I forge <span className="relative inline-block align-baseline">
               <span className="relative inline-block">
                 <span className="z-10 relative">magnetic</span>
-                <motion.img
-                  src="/brush-underline.svg"
-                  alt=""
+                <motion.div
                   className="absolute left-0 right-0 w-full h-2 bottom-[-2px] pointer-events-none origin-left"
                   initial={{ scaleX: 0 }}
-                  animate={{ scaleX: 1 }}
+                  animate={{ scaleX: prefersReducedMotion ? 1 : 1 }}
                   transition={{
-                    duration: 1.2,
+                    duration: prefersReducedMotion ? 0 : 1.2,
                     ease: [0.42, 0, 0.58, 1],
-                    delay: 0.8,
+                    delay: prefersReducedMotion ? 0 : 0.8,
                   }}
-                  onError={(e) => {
-                    e.currentTarget.style.display = 'none';
-                  }}
-                />
+                >
+                  <OptimizedImage
+                    src="/brush-underline.svg"
+                    alt=""
+                    className="w-full h-full"
+                    loading="eager"
+                    fetchpriority="high"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                    }}
+                  />
+                </motion.div>
               </span>
             </span> brand<br />
             identities
           </motion.h1>
 
           {/* Subtitle */}
-          <motion.div className="mx-auto" variants={layeredTextVariants}>
+          <motion.div className="mx-auto" variants={prefersReducedMotion ? {} : layeredTextVariants}>
             <p className="font-light text-white max-w-4xl mx-auto" style={{ fontSize: '1rem', marginBottom: '2.5rem' }}>
               ~no half‑measures, pure impact.~
             </p>
@@ -224,7 +249,7 @@ const Hero: React.FC = () => {
           <motion.div
             className="flex flex-col sm:flex-row gap-[1.5rem] justify-center items-center"
             style={{ marginTop: '2rem' }}
-            variants={buttonGroupVariants}
+            variants={prefersReducedMotion ? {} : buttonGroupVariants}
           >
             <Button
               onClick={() => scrollToSection('projects')}
@@ -263,7 +288,7 @@ const Hero: React.FC = () => {
           <motion.div
             className="flex justify-center items-center gap-1 text-xs text-white/70 opacity-70"
             style={{ marginTop: '3rem' }}
-            variants={layeredTextVariants}
+            variants={prefersReducedMotion ? {} : layeredTextVariants}
           >
             <div className="flex gap-1">
               {[...Array(5)].map((_, i) => (
@@ -295,7 +320,7 @@ const Hero: React.FC = () => {
         {/* Scroll Arrow - restore to absolute bottom center */}
         <motion.div
           className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 animate-slow-bounce z-20"
-          variants={layeredTextVariants}
+          variants={prefersReducedMotion ? {} : layeredTextVariants}
         >
           <span className="text-sm font-light text-white drop-shadow-sm">Scroll</span>
           <ChevronDown size={20} className="text-white drop-shadow-sm" />

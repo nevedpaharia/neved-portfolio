@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { useReducedMotion } from '@/hooks/use-reduced-motion';
+import OptimizedImage from '@/components/ui/optimized-image';
 import { useScaleUpSection, scaleUpVariants, scaleUpContainerVariants, layeredTextVariants, layeredContainerVariants } from '@/hooks/use-scale-up-section';
 
 const ProjectCard = ({ title, description, link, thumbnail, video }) => {
@@ -12,8 +14,9 @@ const ProjectCard = ({ title, description, link, thumbnail, video }) => {
   const hoverTimeout = useRef(null);
   const videoRef = useRef(null);
   const cardRef = useRef(null);
+  const prefersReducedMotion = useReducedMotion();
 
-  // Add scroll-based floating animation
+  // Add scroll-based floating animation (only if motion is not reduced)
   const { scrollYProgress } = useScroll({
     target: cardRef,
     offset: ["start end", "end start"]
@@ -36,8 +39,8 @@ const ProjectCard = ({ title, description, link, thumbnail, video }) => {
   }, []);
 
   useEffect(() => {
-    if (isHovered) {
-      // Set a timeout to load video after hover
+    if (isHovered && !prefersReducedMotion) {
+      // Set a timeout to load video after hover (only if motion is not reduced)
       hoverTimeout.current = setTimeout(() => {
         setShouldLoadVideo(true);
         setShowVideo(true);
@@ -55,7 +58,7 @@ const ProjectCard = ({ title, description, link, thumbnail, video }) => {
       return () => clearTimeout(unloadTimeout);
     }
     return () => clearTimeout(hoverTimeout.current);
-  }, [isHovered]);
+  }, [isHovered, prefersReducedMotion]);
 
   const handleVideoLoad = () => {
     setIsVideoReady(true);
@@ -109,23 +112,29 @@ const ProjectCard = ({ title, description, link, thumbnail, video }) => {
             height: imgHoverHeight,
             minWidth: imgInitialWidth,
             minHeight: imgInitialHeight,
-            transition: 'width 0.6s ease-in-out, height 0.6s ease-in-out, filter 0.3s, backdrop-filter 0.3s, transform 0.3s'
+            transition: prefersReducedMotion ? 'none' : 'width 0.6s ease-in-out, height 0.6s ease-in-out, filter 0.3s, backdrop-filter 0.3s, transform 0.3s'
           }}
           animate={{ scale: 1 }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: prefersReducedMotion ? 0 : 0.8, ease: [0.22, 1, 0.36, 1] }}
         >
           {/* Thumbnail Image */}
           <motion.div
             className="absolute inset-0"
             initial={{ opacity: 1 }}
             animate={{ opacity: showVideo ? 0 : 1 }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: prefersReducedMotion ? 0 : 0.7, ease: [0.22, 1, 0.36, 1] }}
           >
-            <img
+            <OptimizedImage
               src={thumbnail}
               alt={title}
+              width={imgInitialWidth}
+              height={imgInitialHeight}
               className="w-full h-full object-cover bg-black"
               loading="lazy"
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.parentElement!.style.backgroundColor = '#000';
+              }}
             />
           </motion.div>
 
@@ -136,7 +145,7 @@ const ProjectCard = ({ title, description, link, thumbnail, video }) => {
               initial={{ opacity: 0 }}
               animate={{ opacity: isVideoReady ? 1 : 0 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: prefersReducedMotion ? 0 : 0.8, ease: [0.22, 1, 0.36, 1] }}
             >
               <video
                 ref={videoRef}
@@ -146,6 +155,8 @@ const ProjectCard = ({ title, description, link, thumbnail, video }) => {
                 loop
                 playsInline
                 preload="metadata"
+                width={imgHoverWidth}
+                height={imgHoverHeight}
                 onLoadedData={handleVideoLoad}
                 onError={handleVideoError}
                 className="w-full h-full object-cover bg-black"

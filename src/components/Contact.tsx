@@ -8,6 +8,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Linkedin, Instagram, Mail } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
+import { useReducedMotion } from '@/hooks/use-reduced-motion';
 
 // Declare Tawk_API for TypeScript
 declare global {
@@ -36,6 +37,7 @@ const Contact = () => {
     message: ''
   });
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const prefersReducedMotion = useReducedMotion();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

@@ -2,6 +2,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { useFadeInSection } from '@/hooks/use-fade-in-section';
+import { useReducedMotion } from '@/hooks/use-reduced-motion';
+import OptimizedImage from '@/components/ui/optimized-image';
 import { useScaleUpSection, scaleUpVariants, scaleUpContainerVariants, layeredTextVariants, layeredContainerVariants } from '@/hooks/use-scale-up-section';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { motion, useScroll, useTransform } from 'framer-motion';
@@ -13,6 +15,7 @@ const About = () => {
     { name: 'Brand Identity', level: 90 },
     { name: 'Visual Design', level: 80 }
   ];
+  const prefersReducedMotion = useReducedMotion();
 
   // Use the enhanced scale-up variants
   const containerVariants = scaleUpContainerVariants;
@@ -85,24 +88,36 @@ const About = () => {
 
   const ProfileImage = ({ className }: { className: string }) => (
     <div className={className}>
-      <img 
+      <OptimizedImage 
         src="/Professional Photo.webp" 
         alt="Professional Photo" 
+        width={400}
+        height={500}
         className="w-full h-full object-cover"
         loading="lazy"
+        onError={(e) => {
+          e.currentTarget.style.display = 'none';
+          e.currentTarget.parentElement!.style.backgroundColor = '#14213d';
+        }}
       />
     </div>
   );
 
   return (
     <section id="about" className="relative overflow-hidden flex flex-col justify-center min-h-screen py-[29rem]">
-      <img
+      <OptimizedImage
         src="/background/paper 2.webp"
         alt="Torn Paper Background"
+        width={1920}
+        height={1080}
         className="absolute inset-0 w-full h-full object-cover object-center z-0 pointer-events-none select-none"
         draggable={false}
         aria-hidden="true"
         loading="lazy"
+        onError={(e) => {
+          e.currentTarget.style.display = 'none';
+          e.currentTarget.parentElement!.style.backgroundColor = '#14213d';
+        }}
       />
 
       <motion.div 

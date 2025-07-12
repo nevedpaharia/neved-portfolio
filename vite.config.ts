@@ -89,6 +89,7 @@ export default defineConfig(({ mode }) => ({
       compress: {
         drop_console: mode === 'production',
         drop_debugger: mode === 'production',
+        pure_funcs: mode === 'production' ? ['console.log', 'console.info', 'console.debug'] : [],
       },
     },
     rollupOptions: {
@@ -98,10 +99,13 @@ export default defineConfig(({ mode }) => ({
           framer: ['framer-motion'],
           ui: ['@radix-ui/react-checkbox', '@radix-ui/react-select', '@radix-ui/react-toast', '@radix-ui/react-tooltip'],
           icons: ['lucide-react', 'react-icons'],
+          router: ['react-router-dom'],
+          utils: ['clsx', 'class-variance-authority', 'tailwind-merge'],
         },
       },
     },
     chunkSizeWarningLimit: 1000,
+    sourcemap: mode === 'development',
   },
   optimizeDeps: {
     include: ['react', 'react-dom', 'framer-motion'],

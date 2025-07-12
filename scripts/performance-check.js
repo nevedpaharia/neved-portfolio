@@ -1,119 +1,140 @@
 #!/usr/bin/env node
 
 import { execSync } from 'child_process';
-import fs from 'fs';
+import { readFileSync, existsSync } from 'fs';
 import path from 'path';
 
-const BUILD_DIR = 'dist';
-
-function getFileSize(filePath) {
-  const stats = fs.statSync(filePath);
-  return (stats.size / 1024).toFixed(2); // KB
-}
-
-function formatBytes(bytes) {
-  if (bytes === 0) return '0 Bytes';
-  const k = 1024;
-  const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-}
-
-function analyzeBuild() {
-  console.log('🔍 Analyzing build performance...\n');
-
-  if (!fs.existsSync(BUILD_DIR)) {
-    console.log('❌ Build directory not found. Run "npm run build" first.');
-    return;
-  }
-
-  const files = [];
-  const totalSize = { js: 0, css: 0, assets: 0, total: 0 };
-
-  function scanDirectory(dir) {
-    const items = fs.readdirSync(dir);
-    
-    items.forEach(item => {
-      const fullPath = path.join(dir, item);
-      const stat = fs.statSync(fullPath);
-      
-      if (stat.isDirectory()) {
-        scanDirectory(fullPath);
-      } else {
-        const size = stat.size;
-        const ext = path.extname(item);
-        
-        if (ext === '.js') {
-          totalSize.js += size;
-        } else if (ext === '.css') {
-          totalSize.css += size;
-        } else {
-          totalSize.assets += size;
-        }
-        
-        totalSize.total += size;
-        
-        files.push({
-          name: item,
-          path: fullPath.replace(BUILD_DIR, ''),
-          size: size,
-          sizeFormatted: formatBytes(size)
-        });
-      }
-    });
-  }
-
-  scanDirectory(BUILD_DIR);
-
-  // Sort files by size
-  files.sort((a, b) => b.size - a.size);
-
-  console.log('📊 Build Analysis Results:\n');
+// Check for unused imports and exports
+function checkUnusedImports() {
+  console.log('🔍 Checking for unused imports...\n');
   
-  console.log('📁 Total Build Size:', formatBytes(totalSize.total));
-  console.log('📄 JavaScript:', formatBytes(totalSize.js));
-  console.log('🎨 CSS:', formatBytes(totalSize.css));
-  console.log('🖼️  Assets:', formatBytes(totalSize.assets));
-  
-  console.log('\n📋 Largest Files:');
-  files.slice(0, 10).forEach((file, index) => {
-    console.log(`${index + 1}. ${file.path} - ${file.sizeFormatted}`);
-  });
-
-  // Performance recommendations
-  console.log('\n💡 Performance Recommendations:');
-  
-  if (totalSize.js > 500 * 1024) { // 500KB
-    console.log('⚠️  JavaScript bundle is large. Consider code splitting.');
-  }
-  
-  if (totalSize.css > 100 * 1024) { // 100KB
-    console.log('⚠️  CSS bundle is large. Consider purging unused styles.');
-  }
-  
-  if (totalSize.assets > 2 * 1024 * 1024) { // 2MB
-    console.log('⚠️  Assets are large. Consider optimizing images.');
-  }
-
-  // Check for gzip compression
   try {
-    const gzipFiles = files.filter(f => f.name.endsWith('.gz'));
-    if (gzipFiles.length > 0) {
-      console.log('✅ Gzip compression detected');
+    // Run ESLint to find unused imports
+    const result = execSync('npm run lint', { encoding: 'utf8' });
+    const lines = result.split('\n');
+    const unusedImports = lines.filter(line => 
+      line.includes('unused') || 
+      line.includes('defined but never used') ||
+      line.includes('imported but never used')
+    );
+    
+    if (unusedImports.length > 0) {
+      console.log('❌ Found unused imports/exports:');
+      unusedImports.forEach(line => console.log(`   ${line}`));
     } else {
-      console.log('⚠️  Gzip compression not found. Consider enabling it.');
+      console.log('✅ No unused imports found');
     }
   } catch (error) {
-    console.log('⚠️  Could not check compression status');
+    console.log('⚠️  Could not check for unused imports (ESLint may not be configured)');
   }
-
-  console.log('\n🎯 Target Metrics:');
-  console.log('- Total size: < 2MB');
-  console.log('- JavaScript: < 500KB');
-  console.log('- CSS: < 100KB');
-  console.log('- First Contentful Paint: < 1.5s');
-  console.log('- Largest Contentful Paint: < 2.5s');
 }
 
-// Run analysis
-analyzeBuild(); 
+// Check for large dependencies
+function checkLargeDependencies() {
+  console.log('\n📦 Checking for large dependencies...\n');
+  
+  try {
+    const packageJson = JSON.parse(readFileSync('package.json', 'utf8'));
+    const allDeps = { ...packageJson.dependencies, ...packageJson.devDependencies };
+    
+    console.log('Dependencies to consider for tree-shaking:');
+    Object.entries(allDeps).forEach(([name, version]) => {
+      console.log(`   ${name}: ${version}`);
+    });
+  } catch (error) {
+    console.log('❌ Could not read package.json');
+  }
+}
+
+// Check for large files
+function checkLargeFiles() {
+  console.log('\n📁 Checking for large files...\n');
+  
+  try {
+    const result = execSync('find src -type f -name "*.tsx" -o -name "*.ts" | xargs wc -l | sort -nr | head -10', { encoding: 'utf8' });
+    console.log('Largest TypeScript/React files:');
+    console.log(result);
+  } catch (error) {
+    console.log('❌ Could not check file sizes');
+  }
+}
+
+// Check for performance issues in code
+function checkPerformanceIssues() {
+  console.log('\n⚡ Checking for common performance issues...\n');
+  
+  const issues = [];
+  
+  // Check for missing dependency arrays in useEffect
+  try {
+    const result = execSync('grep -r "useEffect" src --include="*.tsx" --include="*.ts"', { encoding: 'utf8' });
+    const lines = result.split('\n').filter(line => line.trim());
+    
+    lines.forEach(line => {
+      if (line.includes('useEffect') && !line.includes('[]') && !line.includes('[')) {
+        issues.push(`Potential missing dependency array: ${line.trim()}`);
+      }
+    });
+  } catch (error) {
+    // No useEffect found or grep failed
+  }
+  
+  // Check for inline functions in JSX
+  try {
+    const result = execSync('grep -r "onClick.*=>" src --include="*.tsx"', { encoding: 'utf8' });
+    const lines = result.split('\n').filter(line => line.trim());
+    
+    if (lines.length > 0) {
+      issues.push(`Found ${lines.length} inline functions in JSX (consider using useCallback)`);
+    }
+  } catch (error) {
+    // No inline functions found
+  }
+  
+  if (issues.length > 0) {
+    console.log('⚠️  Potential performance issues found:');
+    issues.forEach(issue => console.log(`   ${issue}`));
+  } else {
+    console.log('✅ No obvious performance issues found');
+  }
+}
+
+// Check bundle size
+function checkBundleSize() {
+  console.log('\n📊 Checking bundle size...\n');
+  
+  try {
+    // Build the project
+    console.log('Building project to analyze bundle size...');
+    execSync('npm run build', { stdio: 'inherit' });
+    
+    // Check if build directory exists
+    if (existsSync('dist')) {
+      const result = execSync('du -sh dist/*', { encoding: 'utf8' });
+      console.log('Bundle sizes:');
+      console.log(result);
+    }
+  } catch (error) {
+    console.log('❌ Could not build project or check bundle size');
+  }
+}
+
+// Main function
+async function main() {
+  console.log('🚀 Starting performance analysis...\n');
+  
+  checkUnusedImports();
+  checkLargeDependencies();
+  checkLargeFiles();
+  checkPerformanceIssues();
+  checkBundleSize();
+  
+  console.log('\n✅ Performance analysis completed!');
+  console.log('\n💡 Recommendations:');
+  console.log('   - Run "npm run optimize-images" to compress large images');
+  console.log('   - Consider code splitting for large components');
+  console.log('   - Use React.memo for expensive components');
+  console.log('   - Implement lazy loading for non-critical components');
+}
+
+main().catch(console.error); 

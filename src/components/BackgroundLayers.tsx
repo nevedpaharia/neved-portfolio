@@ -17,7 +17,10 @@ const BackgroundLayers: React.FC = () => (
     <img
       src="/background/background.webp"
       alt="Background"
-      loading="lazy"
+      width={1920}
+      height={1080}
+      loading="eager"
+      fetchpriority="high"
       style={{
         position: 'absolute',
         inset: 0,
@@ -29,6 +32,10 @@ const BackgroundLayers: React.FC = () => (
         userSelect: 'none',
       }}
       draggable={false}
+      onError={(e) => {
+        e.currentTarget.style.display = 'none';
+        e.currentTarget.parentElement!.style.backgroundColor = '#14213d';
+      }}
     />
   </div>
 );
