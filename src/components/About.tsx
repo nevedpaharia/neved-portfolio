@@ -85,25 +85,35 @@ const About = () => {
 
   const ProfileImage = ({ className }: { className: string }) => (
     <div className={className}>
-      <img 
-        src="/Professional Photo.webp" 
-        alt="Professional Photo" 
-        className="w-full h-full object-cover"
-        loading="lazy"
-      />
+      <picture>
+        <source srcSet="/Professional Photo.avif" type="image/avif" />
+        <source srcSet="/Professional Photo.webp" type="image/webp" />
+        <img 
+          src="/Professional Photo.jpg" 
+          alt="Professional Photo" 
+          width={400}
+          height={500}
+          className="w-full h-full object-cover"
+          loading="lazy"
+        />
+      </picture>
     </div>
   );
 
   return (
     <section id="about" className="relative overflow-hidden flex flex-col justify-center min-h-screen py-[29rem]">
-      <img
-        src="/background/paper 2.webp"
-        alt="Torn Paper Background"
-        className="absolute inset-0 w-full h-full object-cover object-center z-0 pointer-events-none select-none"
-        draggable={false}
-        aria-hidden="true"
-        loading="lazy"
-      />
+      <picture>
+        <source srcSet="/background/paper 2.avif" type="image/avif" />
+        <source srcSet="/background/paper 2.webp" type="image/webp" />
+        <img
+          src="/background/paper 2.jpg"
+          alt="Torn Paper Background"
+          className="absolute inset-0 w-full h-full object-cover object-center z-0 pointer-events-none select-none"
+          draggable={false}
+          aria-hidden="true"
+          loading="lazy"
+        />
+      </picture>
 
       <motion.div 
         className="max-w-5xl mx-auto px-4 md:px-6 relative z-10" 

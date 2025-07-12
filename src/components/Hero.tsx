@@ -91,18 +91,21 @@ const Hero: React.FC = () => {
           <>
             <div className="flex justify-between items-center">
               <button onClick={() => scrollToSection('home')} className="focus:outline-none focus-visible:ring-2 focus-visible:ring-accent">
-                <img
-                  src="/logo.png"
-                  alt="Logo"
-                  width={86}
-                  height={34}
-                  className="object-contain"
-                  onError={(e) => {
-                    e.currentTarget.style.display = 'none';
-                    e.currentTarget.parentElement!.innerHTML =
-                      '<div class="text-lg font-bold text-primary">NEVED</div>';
-                  }}
-                />
+                <picture>
+                  <source srcSet="/logo.webp" type="image/webp" />
+                  <img
+                    src="/logo.png"
+                    alt="Logo"
+                    width={86}
+                    height={34}
+                    className="object-contain"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                      e.currentTarget.parentElement!.innerHTML =
+                        '<div class="text-lg font-bold text-primary">NEVED</div>';
+                    }}
+                  />
+                </picture>
               </button>
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -139,18 +142,21 @@ const Hero: React.FC = () => {
               </button>
             ))}
             <button onClick={() => scrollToSection('home')} className="focus:outline-none focus-visible:ring-2 focus-visible:ring-accent">
-              <img
-                src="/logo.png"
-                alt="Logo"
-                width={108}
-                height={43}
-                className="object-contain mx-auto"
-                onError={(e) => {
-                  e.currentTarget.style.display = 'none';
-                  e.currentTarget.parentElement!.innerHTML =
-                    '<div class="text-xl font-bold text-primary">NEVED</div>';
-                }}
-              />
+              <picture>
+                <source srcSet="/logo.webp" type="image/webp" />
+                <img
+                  src="/logo.png"
+                  alt="Logo"
+                  width={108}
+                  height={43}
+                  className="object-contain mx-auto"
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
+                    e.currentTarget.parentElement!.innerHTML =
+                      '<div class="text-xl font-bold text-primary">NEVED</div>';
+                  }}
+                />
+              </picture>
             </button>
             {['testimonials', 'contact'].map((sec) => (
               <button

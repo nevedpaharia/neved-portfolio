@@ -43,12 +43,17 @@ const Footer = () => {
 
           {/* Center - Logo */}
           <div className="flex justify-center justify-self-center">
-            <img
-              src="/logo.png"
-              alt="Neved Logo"
-              className="w-20 md:w-28 h-auto object-contain"
-              loading="lazy"
-            />
+            <picture>
+              <source srcSet="/logo.webp" type="image/webp" />
+              <img
+                src="/logo.png"
+                alt="Neved Logo"
+                width={112}
+                height={44}
+                className="w-20 md:w-28 h-auto object-contain"
+                loading="lazy"
+              />
+            </picture>
           </div>
 
           {/* Right - Follow Me */}

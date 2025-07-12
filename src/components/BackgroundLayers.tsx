@@ -14,22 +14,26 @@ const BackgroundLayers: React.FC = () => (
     aria-hidden="true"
   >
     {/* Single Background Image */}
-    <img
-      src="/background/background.webp"
-      alt="Background"
-      loading="lazy"
-      style={{
-        position: 'absolute',
-        inset: 0,
-        width: '100vw',
-        height: '100vh',
-        objectFit: 'cover',
-        zIndex: 1,
-        pointerEvents: 'none',
-        userSelect: 'none',
-      }}
-      draggable={false}
-    />
+    <picture>
+      <source srcSet="/background/background.avif" type="image/avif" />
+      <source srcSet="/background/background.webp" type="image/webp" />
+      <img
+        src="/background/background.jpg"
+        alt="Background"
+        loading="lazy"
+        style={{
+          position: 'absolute',
+          inset: 0,
+          width: '100vw',
+          height: '100vh',
+          objectFit: 'cover',
+          zIndex: 1,
+          pointerEvents: 'none',
+          userSelect: 'none',
+        }}
+        draggable={false}
+      />
+    </picture>
   </div>
 );
 

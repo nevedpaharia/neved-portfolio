@@ -121,12 +121,18 @@ const ProjectCard = ({ title, description, link, thumbnail, video }) => {
             animate={{ opacity: showVideo ? 0 : 1 }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           >
-            <img
-              src={thumbnail}
-              alt={title}
-              className="w-full h-full object-cover bg-black"
-              loading="lazy"
-            />
+            <picture>
+              <source srcSet={thumbnail.replace('.webp', '.avif')} type="image/avif" />
+              <source srcSet={thumbnail} type="image/webp" />
+              <img
+                src={thumbnail.replace('.webp', '.jpg')}
+                alt={title}
+                width={imgHoverWidth}
+                height={imgHoverHeight}
+                className="w-full h-full object-cover bg-black"
+                loading="lazy"
+              />
+            </picture>
           </motion.div>
 
           {/* Video with lazy loading and proper cleanup */}
