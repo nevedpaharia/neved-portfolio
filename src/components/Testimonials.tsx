@@ -275,6 +275,7 @@ const Testimonials = () => {
               }
               ref={imageContainerRef}
               style={{ 
+                position: 'relative',
                 perspective: '900px',
                 y: floatingY,
               }}

@@ -142,6 +142,7 @@ const About = () => {
                   ref={cardRef}
                   className={`inline-block group overflow-hidden radius-lg md:radius-xl bg-white/10 border border-white/20 shadow-md hover:shadow-xl transition-[filter,backdrop-filter,transform] duration-300 ease-in-out hover:-translate-y-2 ${isInView ? 'backdrop-blur-0' : 'backdrop-blur-lg'}`}
                   style={{
+                    position: 'relative',
                     y: floatingY, // Apply floating animation
                   }}
                 >
@@ -158,12 +159,13 @@ const About = () => {
           <motion.div className={`${isMobile ? 'order-1' : 'order-1 lg:order-2'} relative`} variants={itemVariants}>
             {isMobile && (
               <motion.div className="float-right ml-4 mb-4" variants={itemVariants}>
-                <motion.div 
-                  className="w-16 h-16 radius-full overflow-hidden bg-white/10 backdrop-blur-lg border border-white/20 shadow-md"
-                  style={{
-                    y: floatingY, // Apply floating animation to mobile image too
-                  }}
-                >
+                              <motion.div 
+                className="w-16 h-16 radius-full overflow-hidden bg-white/10 backdrop-blur-lg border border-white/20 shadow-md"
+                style={{
+                  position: 'relative',
+                  y: floatingY, // Apply floating animation to mobile image too
+                }}
+              >
                   <ProfileImage className="w-full h-full" />
                 </motion.div>
               </motion.div>

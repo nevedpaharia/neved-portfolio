@@ -97,6 +97,7 @@ const ProjectCard = ({ title, description, link, thumbnail, video }) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       className="group block mx-auto w-full max-w-[62.5rem] transition-all ease-in-out duration-500"
+      style={{ position: 'relative' }}
     >
       <div
         ref={(node) => {
@@ -108,6 +109,7 @@ const ProjectCard = ({ title, description, link, thumbnail, video }) => {
         <motion.div
           className={`radius-xl overflow-hidden flex-shrink-0 transition-shadow duration-300 relative ${isHovered ? 'shadow-xl' : ''}`}
           style={{
+            position: 'relative',
             width: isHovered ? imgHoverWidth : imgInitialWidth,
             height: imgHoverHeight,
             minWidth: imgInitialWidth,

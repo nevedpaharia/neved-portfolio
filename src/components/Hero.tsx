@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useReducedMotion } from '@/hooks/use-reduced-motion';
 import OptimizedImage from '@/components/ui/optimized-image';
+import { getScrollOffset } from '@/lib/motion-utils';
 import {
   useScaleUpSection,
   scaleUpVariants,
@@ -82,21 +83,16 @@ const Hero: React.FC = () => {
   const scrollToSection = (id: string): void => {
     const section = document.getElementById(id);
     if (section) {
-      // Ensure the section has a relative position for proper scroll calculation
-      if (getComputedStyle(section).position === 'static') {
-        section.style.position = 'relative';
-      }
-      
       // Find the primary heading (quentin-font) inside the section
       const heading = section.querySelector('.quentin-font');
       if (heading) {
         const yOffset = -7 * 16; // 7rem in px
-        const y = (heading as HTMLElement).getBoundingClientRect().top + window.pageYOffset + yOffset;
+        const y = getScrollOffset(heading as HTMLElement, yOffset);
         window.scrollTo({ top: y, behavior: 'smooth' });
       } else {
         // fallback: scroll to section top with offset
         const yOffset = -7 * 16;
-        const y = section.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        const y = getScrollOffset(section, yOffset);
         window.scrollTo({ top: y, behavior: 'smooth' });
       }
     }
@@ -190,7 +186,7 @@ const Hero: React.FC = () => {
       </nav>
 
       {/* Hero Body */}
-      <div className="relative flex flex-col items-center justify-center text-white text-center px-4 pt-[10vh] min-h-[100vh]">
+      <div className="relative flex flex-col items-center justify-center text-white text-center px-4 pt-[10vh] min-h-[100vh]" style={{ position: 'relative' }}>
         <motion.div
           className="relative z-10 max-w-4xl w-full"
           variants={prefersReducedMotion ? {} : scaleUpContainerVariants}
@@ -325,6 +321,7 @@ const Hero: React.FC = () => {
         {/* Scroll Arrow - restore to absolute bottom center */}
         <motion.div
           className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 animate-slow-bounce z-20"
+          style={{ position: 'absolute' }}
           variants={prefersReducedMotion ? {} : layeredTextVariants}
         >
           <span className="text-sm font-light text-white drop-shadow-sm">Scroll</span>

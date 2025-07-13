@@ -170,6 +170,23 @@ section {
   position: relative;
 }
 
+/* Ensure all motion components have proper positioning */
+[data-framer-motion] {
+  position: relative;
+}
+
+/* Fix for Framer Motion scroll offset warnings */
+.motion-container {
+  position: relative;
+}
+
+/* Ensure all animated elements have proper positioning */
+.motion-div,
+.motion-section,
+.motion-article {
+  position: relative;
+}
+
 .fade-in-section {
   opacity: 1;
   transform: none;

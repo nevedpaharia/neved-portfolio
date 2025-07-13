@@ -19,6 +19,7 @@ declare global {
       maximize: () => void;
       minimize: () => void;
     };
+    loadTawkTo?: () => void;
   }
 }
 import { useFadeInSection } from '@/hooks/use-fade-in-section';
@@ -127,25 +128,33 @@ const Contact = () => {
               <button
                 type="button"
                 onClick={() => {
-                  if (window.Tawk_API) {
-                    if (!isChatOpen) {
-                      if (typeof window.Tawk_API.showWidget === 'function') {
-                        window.Tawk_API.showWidget();
-                      }
-                      if (typeof window.Tawk_API.maximize === 'function') {
-                        window.Tawk_API.maximize();
-                      }
-                      setIsChatOpen(true);
-                    } else {
-                      if (typeof window.Tawk_API.minimize === 'function') {
-                        window.Tawk_API.minimize();
-                      }
-                      if (typeof window.Tawk_API.hideWidget === 'function') {
-                        window.Tawk_API.hideWidget();
-                      }
-                      setIsChatOpen(false);
-                    }
+                  // Load Tawk.to if not already loaded
+                  if (typeof window.loadTawkTo === 'function') {
+                    window.loadTawkTo();
                   }
+                  
+                  // Wait a bit for Tawk.to to load, then show widget
+                  setTimeout(() => {
+                    if (window.Tawk_API) {
+                      if (!isChatOpen) {
+                        if (typeof window.Tawk_API.showWidget === 'function') {
+                          window.Tawk_API.showWidget();
+                        }
+                        if (typeof window.Tawk_API.maximize === 'function') {
+                          window.Tawk_API.maximize();
+                        }
+                        setIsChatOpen(true);
+                      } else {
+                        if (typeof window.Tawk_API.minimize === 'function') {
+                          window.Tawk_API.minimize();
+                        }
+                        if (typeof window.Tawk_API.hideWidget === 'function') {
+                          window.Tawk_API.hideWidget();
+                        }
+                        setIsChatOpen(false);
+                      }
+                    }
+                  }, 1000);
                 }}
                 className="h-10 rounded-md text-base md:text-sm font-normal font-montserrat text-white bg-[#0D1B2A] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#0D1B2A] focus:ring-offset-2 hover:scale-105 w-full"
                 style={{ boxShadow: '0 2px 8px 0 rgba(13,27,42,0.08)' }}
