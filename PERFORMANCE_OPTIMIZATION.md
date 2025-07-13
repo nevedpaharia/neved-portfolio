@@ -10,11 +10,11 @@ This document outlines all the performance optimizations implemented for the Nev
 - **Impact**: Eliminates render-blocking CSS fetch, improves FCP and Speed Index
 
 ### 2. Image Optimization
-- **What**: Created `OptimizedImage` component with AVIF → WebP → JPG/PNG fallbacks
+- **What**: Created `OptimizedImage` component with proper error handling and intrinsic dimensions
 - **Files**: 
   - `src/components/ui/optimized-image.tsx` - Reusable optimized image component
   - Updated all components to use `OptimizedImage` instead of raw `<img>` tags
-- **Impact**: Better compression, faster loading, modern format support
+- **Impact**: Better error handling, consistent sizing, foundation for future AVIF/WebP support
 
 ### 3. Intrinsic Dimensions
 - **What**: Added explicit `width` and `height` attributes to all images

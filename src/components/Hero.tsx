@@ -82,6 +82,11 @@ const Hero: React.FC = () => {
   const scrollToSection = (id: string): void => {
     const section = document.getElementById(id);
     if (section) {
+      // Ensure the section has a relative position for proper scroll calculation
+      if (getComputedStyle(section).position === 'static') {
+        section.style.position = 'relative';
+      }
+      
       // Find the primary heading (quentin-font) inside the section
       const heading = section.querySelector('.quentin-font');
       if (heading) {
