@@ -33,7 +33,7 @@
   
   /* ===== TYPOGRAPHY ===== */
   /* Font Families - Our text styles */
-  --font-heading: 'Quentin', serif;      /* For big titles */
+  --font-heading: 'Montserrat', sans-serif;      /* For big titles */
   --font-body: 'Montserrat', sans-serif; /* For regular text */
   
   /* Font Sizes - How big our text can be */

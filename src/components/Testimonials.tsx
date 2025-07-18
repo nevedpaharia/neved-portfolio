@@ -91,7 +91,7 @@ const Testimonials = () => {
       }
     }
     handleResize();
-    window.addEventListener("resize", handleResize);
+    window.addEventListener("resize", handleResize, { passive: true });
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
@@ -216,6 +216,8 @@ const Testimonials = () => {
         className="absolute inset-0 w-full h-full object-cover object-center z-0 pointer-events-none select-none"
         draggable={false}
         aria-hidden="true"
+        width={1920}
+        height={1080}
       />
       <div
         className="max-w-6xl mx-auto px-4 md:px-8 pb-4 md:pb-8 relative z-10"
@@ -266,25 +268,34 @@ const Testimonials = () => {
                     ref={el => cardRefs.current[index] = el}
                     className={`group relative w-full h-full radius-lg md:radius-xl bg-white/10 border border-white/20 shadow-lg transition-[filter,backdrop-filter,transform] duration-300 ease-in-out flex flex-col overflow-hidden ${inViewArr[index] ? 'backdrop-blur-0' : 'backdrop-blur-sm'}`}
                   >
-                    <img 
-                      src={testimonial.src} 
-                      alt={`Testimonial from ${testimonial.name}, ${testimonial.designation} - Brand Identity Client`} 
-                      className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
-                      loading="lazy"
-                      onError={(e) => {
-                        console.log(`Testimonial image failed to load: ${testimonial.src}`);
-                        e.currentTarget.style.display = 'none';
-                        const parent = e.currentTarget.parentElement;
-                        if (parent) {
-                          const initials = testimonial.name.split(' ').map(n => n[0]).join('');
-                          const fallbackHTML = '<div class="w-full h-full bg-gradient-to-br from-primary/20 to-secondary/20 flex flex-col items-center justify-center text-primary">' +
-                            '<div class="text-xl md:text-2xl font-bold mb-2">' + initials + '</div>' +
-                            '<div class="text-xs md:text-sm text-center px-4">' + testimonial.name + '</div>' +
-                            '</div>';
-                          parent.innerHTML = fallbackHTML;
-                        }
-                      }}
-                    />
+                    <picture>
+                      <source type="image/webp" srcSet={[
+                        encodeURI(testimonial.src.replace('.jpg', '-400w.webp')) + ' 400w',
+                        encodeURI(testimonial.src.replace('.jpg', '-800w.webp')) + ' 800w',
+                        encodeURI(testimonial.src.replace('.jpg', '-1200w.webp')) + ' 1200w',
+                      ].join(', ')} sizes="(max-width: 600px) 400px, (max-width: 900px) 800px, 1200px" />
+                      <img 
+                        src={testimonial.src} 
+                        alt={`Testimonial from ${testimonial.name}, ${testimonial.designation} - Brand Identity Client`} 
+                        className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                        loading="lazy"
+                        width={400}
+                        height={533}
+                        onError={(e) => {
+                          console.log(`Testimonial image failed to load: ${testimonial.src}`);
+                          e.currentTarget.style.display = 'none';
+                          const parent = e.currentTarget.parentElement;
+                          if (parent) {
+                            const initials = testimonial.name.split(' ').map(n => n[0]).join('');
+                            const fallbackHTML = '<div class="w-full h-full bg-gradient-to-br from-primary/20 to-secondary/20 flex flex-col items-center justify-center text-primary">' +
+                              '<div class="text-xl md:text-2xl font-bold mb-2">' + initials + '</div>' +
+                              '<div class="text-xs md:text-sm text-center px-4">' + testimonial.name + '</div>' +
+                              '</div>';
+                            parent.innerHTML = fallbackHTML;
+                          }
+                        }}
+                      />
+                    </picture>
                   </div>
                 </div>
               ))}

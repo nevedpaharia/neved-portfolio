@@ -45,6 +45,8 @@ const Footer = () => {
               alt="Neved Paharia Portfolio Logo" 
               className="w-20 md:w-28 h-auto object-contain"
               loading="lazy"
+              width={112}
+              height={44}
             />
           </div>
 

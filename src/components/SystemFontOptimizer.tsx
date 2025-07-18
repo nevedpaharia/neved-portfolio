@@ -52,25 +52,7 @@ const SystemFontOptimizer: React.FC<SystemFontOptimizerProps> = ({ children }) =
   return (
     <div className={useSystemFonts ? 'system-fonts' : ''}>
       {children}
-      {process.env.NODE_ENV === 'development' && (
-        <div style={{
-          position: 'fixed',
-          bottom: '10px',
-          right: '10px',
-          background: 'rgba(0,0,0,0.8)',
-          color: 'white',
-          padding: '8px 12px',
-          borderRadius: '4px',
-          fontSize: '12px',
-          zIndex: 9999,
-          fontFamily: 'monospace'
-        }}>
-          {useSystemFonts ? '🔤 System Fonts' : '🎨 Custom Fonts'}
-          {fontLoadTime && (
-            <div>Load: {fontLoadTime.toFixed(0)}ms</div>
-          )}
-        </div>
-      )}
+      {/* Removed dev font load overlay */}
     </div>
   );
 };

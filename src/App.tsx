@@ -1,50 +1,36 @@
-import { Toaster } from '@/components/ui/toaster';
-import { Toaster as Sonner } from '@/components/ui/sonner';
-import { TooltipProvider } from '@/components/ui/tooltip';
+import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
-import Index from './pages/Index';
-import NotFound from './pages/NotFound';
+import { TooltipProvider } from '@radix-ui/react-tooltip';
+import { Toaster } from 'react-hot-toast';
+import { Toaster as SonnerToaster } from 'sonner';
+
 import BackgroundLayers from './components/BackgroundLayers';
 import SystemFontOptimizer from './components/SystemFontOptimizer';
-import React, { useEffect } from 'react';
-import Lenis from '@studio-freight/lenis';
-import clarity from '@microsoft/clarity';
+import Index from './pages/Index';
+import NotFound from './pages/NotFound';
+import ErrorBoundary from './components/ErrorBoundary';
 
-const App = () => {
-  useEffect(() => {
-    const lenis = new Lenis({
-      lerp: 0.04, // Reduced from 0.08 for smoother, less intense scrolling
-      touchMultiplier: 0.75, // Reduced from 1.5 for less sensitive touch scrolling
-      wheelMultiplier: 0.75, // Reduced from 0.8 for much less sensitive mouse wheel scrolling
-    });
-    function raf(time: number) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
-    return () => {
-      lenis.destroy();
-    };
-  }, []);
-
+function App() {
   return (
     <HelmetProvider>
-      <SystemFontOptimizer>
-        <TooltipProvider>
-          <BackgroundLayers />
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
-        </TooltipProvider>
-      </SystemFontOptimizer>
+      <ErrorBoundary>
+        <SystemFontOptimizer>
+          <TooltipProvider>
+            <BackgroundLayers />
+            <Toaster />
+            <SonnerToaster />
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </BrowserRouter>
+          </TooltipProvider>
+        </SystemFontOptimizer>
+      </ErrorBoundary>
     </HelmetProvider>
   );
-};
+}
 
 export default App;

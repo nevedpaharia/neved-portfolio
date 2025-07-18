@@ -35,25 +35,14 @@ const BackgroundLayers: React.FC = () => {
       {/* Single Background Image */}
       <img
         src="/background/background.webp"
-        alt="Neved Paharia Portfolio Website Background Texture"
-        width={1920}
-        height={1080}
-        loading="eager"
-        fetchpriority="high"
+        alt=""
+        className="w-full h-full object-cover object-center"
         style={{
-          position: 'absolute',
-          inset: 0,
-          width: '100vw',
-          height: '100vh',
-          objectFit: 'cover',
-          zIndex: 1,
-          pointerEvents: 'none',
-          userSelect: 'none',
           opacity: imageLoaded ? 1 : 0,
           transition: 'opacity 0.3s ease-in-out',
         }}
-        draggable={false}
-        onLoad={() => setImageLoaded(true)}
+        width={1920}
+        height={1080}
       />
     </div>
   );

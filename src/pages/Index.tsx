@@ -28,7 +28,7 @@ const Index = () => {
       const percent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
       setScrollPercent(percent);
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
   }, [isMobile]);

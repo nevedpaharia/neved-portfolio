@@ -88,12 +88,14 @@ const About = () => {
         alt="Neved Paharia Profile Photo - Brand Identity Designer" 
         className="w-full h-full object-cover"
         loading="lazy"
+        width={400}
+        height={500}
       />
     </div>
   );
 
   return (
-    <section id="about" className="relative overflow-hidden flex flex-col justify-center min-h-screen py-[29rem]">
+    <section id="about" className="relative overflow-hidden flex flex-col justify-center min-h-screen py-[29rem]" role="region" aria-labelledby="about-heading">
       <img
         src="/background/paper 2.webp"
         alt="Torn Paper Background"
@@ -101,6 +103,8 @@ const About = () => {
         draggable={false}
         aria-hidden="true"
         loading="lazy"
+        width={1920}
+        height={1080}
       />
 
       <div className="max-w-5xl mx-auto px-4 md:px-6 relative z-10" ref={fadeRef}>
@@ -115,8 +119,8 @@ const About = () => {
                   <div className="aspect-[4/5] bg-gradient-to-br from-gray-100 to-gray-200 dark:from-zinc-800 dark:to-zinc-700 radius-lg md:radius-xl overflow-hidden shadow-xl flex items-center justify-center">
                     <ProfileImage className="w-full h-full" />
                   </div>
-                  <div className="absolute -bottom-2 -right-2 md:-bottom-4 md:-right-4 w-12 h-12 md:w-16 md:h-16 bg-primary/20 rounded-full opacity-20"></div>
-                  <div className="absolute -top-2 -left-2 md:-top-4 md:-left-4 w-8 h-8 md:w-12 md:h-12 bg-secondary/20 rounded-full opacity-20"></div>
+                  <div className="absolute -bottom-2 -right-2 md:-bottom-4 md:-right-4 w-12 h-12 md:w-16 md:h-16 bg-primary/20 rounded-full opacity-20" aria-hidden="true"></div>
+                  <div className="absolute -top-2 -left-2 md:-top-4 md:-left-4 w-8 h-8 md:w-12 md:h-12 bg-secondary/20 rounded-full opacity-20" aria-hidden="true"></div>
                 </div>
               </div>
             </div>
@@ -130,7 +134,7 @@ const About = () => {
               </div>
             )}
 
-            <h2 className="quentin-font text-4xl md:text-5xl lg:text-6xl font-bold text-primary mb-3 md:mb-6">
+            <h2 id="about-heading" className="quentin-font text-4xl md:text-5xl lg:text-6xl font-bold text-primary mb-3 md:mb-6">
               About Me
             </h2>
 
@@ -145,14 +149,14 @@ const About = () => {
 
             <div className="mb-4 md:mb-6 clear-both">
               <h3 className="text-base md:text-xl font-bold text-primary mb-3 md:mb-4">Skills & Expertise</h3>
-              <div className="space-y-2 md:space-y-3">
+              <div className="space-y-2 md:space-y-3" role="list" aria-label="Skills and expertise levels">
                 {skills.map((skill, index) => (
-                  <div key={index} className="group">
+                  <div key={index} className="group" role="listitem">
                     <div className="flex justify-between items-center mb-1">
                       <span className="text-gray-700 dark:text-gray-300 font-medium text-xs md:text-sm">{skill.name}</span>
                       <span className="text-gray-500 text-xs">{skill.level}%</span>
                     </div>
-                    <div className="w-full bg-gray-300 dark:bg-zinc-600 rounded-full h-1 md:h-1.5 relative overflow-hidden">
+                    <div className="w-full bg-gray-300 dark:bg-zinc-600 rounded-full h-1 md:h-1.5 relative overflow-hidden" role="progressbar" aria-valuenow={skill.level} aria-valuemin="0" aria-valuemax="100" aria-label={`${skill.name} skill level: ${skill.level}%`}>
                       <div 
                         className="h-1 md:h-1.5 bg-gradient-to-r from-[#031636] to-[#ccb533] rounded-full absolute top-0 left-0"
                         style={{ width: `${skill.level}%` }}
@@ -167,6 +171,7 @@ const About = () => {
               href="/Neved Paharia CV.pdf"
               target="_blank"
               rel="noopener noreferrer"
+              aria-label="Download Neved Paharia's CV (opens in new tab)"
             >
               <Button className="bg-primary hover:bg-primary/90 text-primary-foreground px-4 py-2 md:px-6 md:py-2 text-xs md:text-sm rounded-full transition-all duration-300 hover:scale-105 focus-visible:ring-2 focus-visible:ring-accent">
                 Download CV

@@ -98,12 +98,12 @@ const Contact = () => {
           {/* Calendly Button Only, full width, prominent, mobile responsive */}
           <div className="flex flex-col items-center text-center space-y-4 mb-8">
             <p className="text-base md:text-lg font-montserrat text-white/60 text-center">
-              Got a quick question? Let’s clear it in 30 minutes.
+              Book your free 30‑min design discovery.
             </p>
             <button
               type="button"
-              className="w-full h-12 md:h-14 rounded-md text-base md:text-lg font-bold font-montserrat text-white bg-[#0D1B2A] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#0D1B2A] focus:ring-offset-2 hover:scale-105 shadow-md"
-              style={{ boxShadow: '0 2px 8px 0 rgba(13,27,42,0.08)' }}
+              className="w-full md:w-auto h-12 md:h-14 rounded-md text-base md:text-lg font-bold font-montserrat text-white bg-[#0D1B2A] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#0D1B2A] focus:ring-offset-2 hover:scale-105 shadow-md"
+              style={{ boxShadow: '0 2px 8px 0 rgba(13,27,42,0.08)', padding: '1.25rem 2rem', fontSize: '1rem' }}
               onClick={() => window.open('https://calendly.com/nevedpaharia/30min', '_blank')}
             >
               📅 Book a Calendly Call

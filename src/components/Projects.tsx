@@ -125,6 +125,8 @@ const ProjectCard = ({ title, description, link, thumbnail, video, buttonLabel, 
               alt={`Project: ${title} - Brand Identity Portfolio by Neved Paharia`}
               className="w-full h-full object-cover bg-black"
               loading="lazy"
+              width={416}
+              height={256}
             />
           </div>
 

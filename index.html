@@ -94,6 +94,62 @@
     }
     </script>
 
+    <!-- Content Security Policy -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';">
+    
+    <!-- Preload critical fonts -->
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/Quentin.woff2" />
+    
+    <!-- Preload critical images -->
+    <link rel="preload" as="image" href="/background/background.webp" />
+    <link rel="preload" as="image" href="/logo.png" />
+    
+    <!-- Meta tags for SEO and social sharing -->
+    <meta name="description" content="Neved Paharia - Brand Identity Designer creating magnetic brand identities with no half-measures, pure impact." />
+    <meta name="keywords" content="brand identity, logo design, graphic design, branding, visual design, Adobe Photoshop, Adobe Illustrator" />
+    <meta name="author" content="Neved Paharia" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://nevedpaharia.com/" />
+    <meta property="og:title" content="Neved Paharia - Brand Identity Designer" />
+    <meta property="og:description" content="Creating magnetic brand identities with no half-measures, pure impact." />
+    <meta property="og:image" content="/logo.png" />
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://nevedpaharia.com/" />
+    <meta property="twitter:title" content="Neved Paharia - Brand Identity Designer" />
+    <meta property="twitter:description" content="Creating magnetic brand identities with no half-measures, pure impact." />
+    <meta property="twitter:image" content="/logo.png" />
+    
+    <!-- Theme color -->
+    <meta name="theme-color" content="#14213d" />
+    
+    <!-- Manifest -->
+    <link rel="manifest" href="/site.webmanifest" />
+    
+    <!-- Apple touch icon -->
+    <link rel="apple-touch-icon" href="/logo.png" />
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://nevedpaharia.com/" />
+    
+    <!-- Robots -->
+    <meta name="robots" content="index, follow" />
+    
+    <!-- Viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+    
+    <!-- DNS Prefetch for external resources -->
+    <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="//fonts.gstatic.com" />
+    
+    <!-- Preconnect to external domains -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    
+    <!-- Critical CSS inline -->
     <style>
       /* Critical CSS for hero section - improves FCP and Speed Index */
       
@@ -419,7 +475,14 @@
 
   <body>
     <div id="root"></div>
-    <script type="module" src="/src/main.tsx" defer></script>
+    
+    <!-- Test script to verify JavaScript is loading -->
+    <script>
+      console.log('🔧 HTML script tag is working!');
+      document.body.style.backgroundColor = 'yellow';
+    </script>
+    
+    <script type="module" src="/src/main.tsx" defer onerror="console.error('❌ Failed to load main.tsx')"></script>
     
     <!-- Performance monitoring scripts - load asynchronously -->
     <script type="module" src="/scripts/lcp-optimization.js" async></script>
@@ -437,14 +500,12 @@
           document.fonts.load('300 1em Montserrat')
         ]).then(() => {
           document.documentElement.classList.add('fonts-loaded');
+          document.documentElement.classList.remove('no-fouc'); // <-- Ensure visibility is restored
         });
       } else {
-        // Fallback for browsers that don't support Font Loading API
         document.documentElement.classList.add('fonts-loaded');
+        document.documentElement.classList.remove('no-fouc'); // <-- Ensure visibility is restored
       }
-      
-      // Add loading class to body for FOUC prevention
-      document.documentElement.classList.add('no-fouc');
     </script>
   </body>
 </html>
