@@ -156,7 +156,7 @@ const About = () => {
                       <span className="text-gray-700 dark:text-gray-300 font-medium text-xs md:text-sm">{skill.name}</span>
                       <span className="text-gray-500 text-xs">{skill.level}%</span>
                     </div>
-                    <div className="w-full bg-gray-300 dark:bg-zinc-600 rounded-full h-1 md:h-1.5 relative overflow-hidden" role="progressbar" aria-valuenow={skill.level} aria-valuemin="0" aria-valuemax="100" aria-label={`${skill.name} skill level: ${skill.level}%`}>
+                    <div className="w-full bg-gray-300 dark:bg-zinc-600 rounded-full h-1 md:h-1.5 relative overflow-hidden" role="progressbar" aria-valuenow={skill.level} aria-valuemin={0} aria-valuemax={100} aria-label={`${skill.name} skill level: ${skill.level}%`}>
                       <div 
                         className="h-1 md:h-1.5 bg-gradient-to-r from-[#031636] to-[#ccb533] rounded-full absolute top-0 left-0"
                         style={{ width: `${skill.level}%` }}

@@ -1,19 +1,11 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
-import {
-  useScaleUpSection,
-  scaleUpVariants,
-  scaleUpContainerVariants,
-  layeredTextVariants,
-  layeredContainerVariants,
-  buttonGroupVariants,
-} from '@/hooks/use-scale-up-section';
-import { Menu, X, ChevronDown } from 'lucide-react';
+import { useScaleUpSection } from '@/hooks/use-scale-up-section';
+import { useScroll, useTransform, motion } from 'framer-motion';
+import { Menu, X } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 
 const Hero: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -22,71 +14,51 @@ const Hero: React.FC = () => {
   const isMobile = useIsMobile();
   const scaleUpRef = useScaleUpSection();
 
-  // Add scroll-based floating animation for the brush underline
-  const { scrollYProgress } = useScroll({
-    offset: ['start end', 'end start'],
-  });
+  const { scrollYProgress } = useScroll({ offset: ['start end', 'end start'] });
   const floatingY = useTransform(scrollYProgress, [0, 1], [40, 0]);
-
   const fullText = 'Recommended by my Mother';
 
   useEffect(() => {
-    const timer1 = setTimeout(() => setAnimationStep(1), 300);
-    const timer2 = setTimeout(() => setAnimationStep(2), 800);
-    const timer3 = setTimeout(() => setAnimationStep(3), 1300);
-    const timer4 = setTimeout(() => setAnimationStep(4), 1800);
-    const timer5 = setTimeout(() => setAnimationStep(5), 2300);
-    const timer6 = setTimeout(() => setAnimationStep(6), 2800);
-    return () => {
-      clearTimeout(timer1);
-      clearTimeout(timer2);
-      clearTimeout(timer3);
-      clearTimeout(timer4);
-      clearTimeout(timer5);
-      clearTimeout(timer6);
-    };
+    const timers = [
+      setTimeout(() => setAnimationStep(1), 300),
+      setTimeout(() => setAnimationStep(2), 800),
+      setTimeout(() => setAnimationStep(3), 1300),
+      setTimeout(() => setAnimationStep(4), 1800),
+      setTimeout(() => setAnimationStep(5), 2300),
+      setTimeout(() => setAnimationStep(6), 2800),
+    ];
+    return () => timers.forEach(clearTimeout);
   }, []);
 
   useEffect(() => {
     if (animationStep >= 6) {
       const delay = setTimeout(() => {
         let i = 0;
-        const typewriterTimer = setInterval(() => {
+        const typer = setInterval(() => {
           if (i < fullText.length) {
             setTypewriterText(fullText.slice(0, i + 1));
             i++;
-          } else {
-            clearInterval(typewriterTimer);
-          }
+          } else clearInterval(typer);
         }, 50);
       }, 800);
       return () => clearTimeout(delay);
     }
   }, [animationStep, fullText]);
 
-  const scrollToSection = (id: string): void => {
+  const scrollToSection = (id: string) => {
     const section = document.getElementById(id);
-    if (section) {
-      // Find the primary heading (quentin-font) inside the section
-      const heading = section.querySelector('.quentin-font');
-      if (heading) {
-        const yOffset = -7 * 16; // 7rem in px
-        const y = (heading as HTMLElement).getBoundingClientRect().top + window.pageYOffset + yOffset;
-        window.scrollTo({ top: y, behavior: 'smooth' });
-      } else {
-        // fallback: scroll to section top with offset
-        const yOffset = -7 * 16;
-        const y = section.getBoundingClientRect().top + window.pageYOffset + yOffset;
-        window.scrollTo({ top: y, behavior: 'smooth' });
-      }
-    }
+    if (!section) return setIsMenuOpen(false);
+    const heading = section.querySelector('.quentin-font');
+    const yOffset = -7 * 16;
+    const top = (heading || section).getBoundingClientRect().top + window.pageYOffset + yOffset;
+    window.scrollTo({ top, behavior: 'smooth' });
     setIsMenuOpen(false);
   };
 
   return (
-    <section id="home" className="relative text-white bg-transparent">
+    <section id="home" className="relative text-white bg-transparent py-[14.5rem]">
       {/* Top Nav */}
-      <div className="max-w-4xl mx-auto w-full">
+      <div className="max-w-4xl mx-auto w-full px-4 md:px-6">
         <nav className="px-16 py-4 text-white" style={{ marginTop: 0 }}>
           {isMobile ? (
             <>
@@ -105,10 +77,7 @@ const Hero: React.FC = () => {
                     }}
                   />
                 </button>
-                <button
-                  onClick={() => setIsMenuOpen(!isMenuOpen)}
-                  className="p-2 text-white hover:opacity-80 transition"
-                >
+                <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="p-2 text-white hover:opacity-80 transition">
                   {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
                 </button>
               </div>
@@ -167,106 +136,92 @@ const Hero: React.FC = () => {
         </nav>
       </div>
 
-      {/* Hero Body - True Two Column Layout with Debug Borders */}
-      <div className="w-full max-w-5xl mx-auto px-6 flex flex-col lg:flex-row items-stretch justify-between gap-12 min-h-[80vh]">
-        {/* LEFT COLUMN */}
-        <div className="flex-1 flex flex-col justify-center items-start text-left gap-6 border-2 border-red-500">
-          {/* Startup Daydreamer - now at the top */}
-          <div className="flex items-center gap-2 font-light" style={{ fontSize: '0.9rem' }}>
-            <span className="text-lg">🚀</span>
-            <span>Hey, Startup Daydreamer</span>
-          </div>
-          {/* Headline - constrained width */}
-          <h1 className="font-sans font-bold text-3xl md:text-5xl lg:text-6xl tracking-tight w-full max-w-[500px] break-words" style={{ lineHeight: 1.35, fontFamily: 'Montserrat, sans-serif', fontWeight: 700 }}>
-            I forge <span className="relative inline-block align-baseline">magnetic
-              <img
-                src="/brush-underline.svg"
-                alt=""
-                className="absolute left-0 right-0 w-full h-2 bottom-[-2px] pointer-events-none origin-left"
-                style={{ transform: 'scaleX(1)' }}
-                onError={(e) => {
-                  e.currentTarget.style.display = 'none';
-                }}
-              />
-            </span> brand<br />identities
-          </h1>
-          {/* Subtitle - now directly below headline */}
-          <div className="w-full max-w-[500px]">
-            <p className="font-light text-white mt-2" style={{ fontSize: '1rem' }}>
-              ~no half‑measures, pure impact.~
-            </p>
-          </div>
-          {/* Button Group */}
-          <div className="flex flex-col sm:flex-row gap-4 w-full max-w-[500px]">
-            <Button
-              onClick={() => scrollToSection('projects')}
-              className="bg-white text-[#14213d] px-6 radius-full text-sm font-medium shadow-lg h-11 hover:bg-gray-200 hover:text-[#14213d] w-auto"
-              style={{ minWidth: 'unset' }}
+      {/* Hero Body */}
+      <div className="w-full min-h-screen flex items-center justify-start py-20">
+        <div
+          ref={scaleUpRef}
+          className="max-w-4xl w-full grid grid-cols-1 md:grid-cols-2 gap-8"
+          style={{ gridTemplateColumns: '1fr 1fr' }}
+        >
+          {/* ← LEFT column restored to your original wrapper */}
+          <div className="space-y-4 w-full text-left h-full self-stretch">
+            {/* Startup Daydreamer Greeting */}
+            <div
+              className={`transition-all duration-700 ${
+                animationStep >= 1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+              }`}
             >
-              See My Work
-            </Button>
-            <div className="relative group w-fit h-fit transition-transform duration-300">
-              <div
-                className="absolute inset-0 rounded-md filter blur-lg animate-glowing"
-                style={{
-                  background:
-                    'linear-gradient(45deg, #e0e0e0, transparent, #f0f0f0, #ffffff, transparent, #f8f8f8, #e8e8e8, transparent, #f8f8f8, #ffffff, transparent, #f0f0f0, #e0e0e0)',
-                  backgroundSize: '400% 400%',
-                  zIndex: 0,
-                }}
-              />
-              <div className="absolute inset-0 rounded-md bg-background z-10 pointer-events-none" />
-              <Button
-                variant="ghost"
-                onClick={() => scrollToSection('contact')}
-                className="relative z-20 border border-white text-white bg-transparent px-6 rounded-md text-sm font-medium h-11 flex items-center justify-center hover:text-white backdrop-blur-sm active:scale-95 transition-transform duration-100 w-auto"
-                style={{ color: '#fff', backgroundColor: '#14213d', borderColor: '#fff', minWidth: 'unset' }}
-                onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#14213d'; }}
-                onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#14213d'; }}
-              >
-                Book a Free Call
-              </Button>
+              <div className="flex items-left gap-2 text-left w-full justify-start">
+                <span className="text-2xl">🚀</span>
+                <span className="text-sm font-light text-white/90">Hey, Startup Daydreamer</span>
+              </div>
             </div>
-          </div>
-          {/* Social Proof */}
-          <div className="flex items-center gap-1 text-xs text-white/70 opacity-70 mt-2 w-full max-w-[500px]">
-            <div className="flex gap-1">
-              {[...Array(5)].map((_, i) => (
-                <span
-                  key={i}
-                  className={`text-white/70 transition-all duration-300 opacity-100`}
-                  style={{ transitionDelay: `${i * 100}ms` }}
-                >
-                  ★
+            <div
+              className={`transition-all duration-700 ${
+                animationStep >= 2 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+              }`}
+            >
+              <h1 className="text-3xl md:text-4xl font-bold text-white leading-tight text-left font-montserrat">
+                I forge{' '}
+                <span className="relative inline-block">
+                  magnetic
+                  <motion.img
+                    src="/brush-underline.svg"
+                    alt=""
+                    className="absolute left-1/2 -translate-x-1/2 h-2 bottom-[-2px] pointer-events-none origin-left w-[90%]"
+                    style={{ y: floatingY }}
+                    initial={{ opacity: 0, scaleX: 0 }}
+                    animate={animationStep >= 3 ? { opacity: 1, scaleX: 1 } : {}}
+                    transition={{ duration: 0.7 }}
+                    onError={(e) => e.currentTarget.remove()}
+                  />
                 </span>
-              ))}
+                <br />
+                brand identities
+              </h1>
             </div>
-            <span className="ml-1 text-left text-white/70 transition-all duration-500 opacity-100 translate-x-0">
-              Recommended by my Mother
-            </span>
+
+            <div
+              className={`transition-all duration-700 ${
+                animationStep >= 4 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+              }`}
+            >
+              <p className="text-lg font-light text-white/80 text-left">~no half‑measures, pure impact.~</p>
+            </div>
+
+            <div
+              className={`transition-all duration-700 ${
+                animationStep >= 5 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+              }`}
+            >
+              <div className="flex gap-3 justify-start items-start">
+                <Button
+                  onClick={() => scrollToSection('contact')}
+                  style={{ backgroundColor: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))', position: 'relative', zIndex: 1 }}
+                  className="px-4 py-3 text-sm font-medium shadow-lg border border-white text-white bg-[#14213d] rounded-md flex items-center justify-center relative after:content-[''] after:absolute after:-inset-2 after:rounded-md after:blur-lg after:z-[-1] after:bg-[linear-gradient(45deg,_#e0e0e0,_transparent,_#f0f0f0,_#ffffff,_transparent,_#f8f8f8,_#e8e8e8,_transparent,_#f8f8f8,_#ffffff,_transparent,_#f0f0f0,_#e0e0e0)] after:bg-[length:400%_400%] after:animate-glowing"
+                >
+                  Schedule a Free Consultation
+                </Button>
+                <Button
+                  onClick={() => scrollToSection('projects')}
+                  className="bg-white text-[#14213d] px-4 py-3 text-sm font-medium shadow-lg hover:bg-gray-100 hover:text-[#14213d] rounded-md flex items-center justify-center"
+                >
+                  See My Work
+                </Button>
+              </div>
+            </div>
+          </div>
+
+          {/* RIGHT column with your three pill placeholders */}
+          <div className="relative w-full h-[600px]">
+            <div className="absolute left-0 top-1/4 w-52 h-96 bg-gray-300 rounded-[200px]"></div>
+            <div className="absolute right-0 top-0 w-32 h-48 bg-gray-300 rounded-[200px]"></div>
+            <div className="absolute right-0 bottom-0 w-32 h-48 bg-gray-700 rounded-[200px] flex flex-col items-center justify-center text-white">
+              <div className="text-3xl font-bold">100</div>
+              <div className="text-sm">Cool Number</div>
+            </div>
           </div>
         </div>
-        {/* RIGHT COLUMN */}
-        <div className="flex-1 flex flex-col items-center justify-center gap-6 max-w-xs mx-auto min-h-[350px] border-2 border-blue-500">
-          <div className="flex flex-row items-end justify-center gap-2 w-full mt-8 mb-4">
-            <div className="w-24 h-40 bg-gray-200 rounded-[40%]" />
-            <div className="w-16 h-24 bg-gray-200 rounded-[40%]" />
-            <div className="w-12 h-12 bg-gray-200 rounded-[40%]" />
-          </div>
-          {/* Cool Number Stat Pill */}
-          <div className="bg-gray-500 rounded-full px-8 py-6 flex flex-col items-center justify-center shadow-lg mt-2">
-            <span className="text-2xl font-bold">100</span>
-            <span className="text-base font-light">Cool Number</span>
-          </div>
-        </div>
-      </div>
-      {/* Badges Row Below Hero */}
-      <div className="flex flex-wrap justify-center gap-4 mt-16 w-full">
-        {[1, 2, 3].map((i) => (
-          <div key={i} className="flex items-center gap-2 px-6 py-2 rounded-full border border-gray-300 bg-white/70 text-gray-700 text-base font-medium shadow-sm">
-            <span>✓</span> Positive Result
-          </div>
-        ))}
       </div>
     </section>
   );

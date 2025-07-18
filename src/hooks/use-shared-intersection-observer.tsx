@@ -15,7 +15,7 @@ interface UseSharedIntersectionObserverReturn {
 let globalObserver: IntersectionObserver | null = null;
 const observerCallbacks = new Map<Element, (isIntersecting: boolean) => void>();
 
-const createGlobalObserver = (options: IntersectionObserverOptions) => {
+const createGlobalObserver = (options: IntersectionObserverInit) => {
   if (globalObserver) {
     globalObserver.disconnect();
   }
@@ -38,7 +38,7 @@ export const useSharedIntersectionObserver = (
   const ref = useRef<HTMLElement>(null);
   const [isIntersecting, setIsIntersecting] = useState(false);
   
-  const defaultOptions: IntersectionObserverOptions = {
+  const defaultOptions: IntersectionObserverInit = {
     threshold: options.threshold ?? 0.2,
     root: options.root ?? null,
     rootMargin: options.rootMargin ?? '0px',
